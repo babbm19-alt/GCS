@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CCR 1.1.1 — Letter to Your Future Self</title>
+<style>
+:root{
+  --navy:#1b2a4a;
+  --purple:#6b3fa0;
+  --lilac:#f2ecf8;
+  --green:#1a7f4e;
+  --red:#c0392b;
+  --amber:#b7791f;
+  --bg:#f7f6fa;
+  --card:#ffffff;
+  --ink:#1b2a4a;
+  --ink-soft:#55607a;
+  --ink-faint:#7d879c;
+  --line:#dfd9ea;
+  --line-soft:#eeeaf5;
+  --r:14px;
+  --shadow:0 1px 2px rgba(27,42,74,.06), 0 6px 20px rgba(27,42,74,.07);
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font:16px/1.6 "Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+  -webkit-text-size-adjust:100%;
+}
+code,kbd,.mono{font-family:Consolas,"Courier New",monospace}
+.wrap{max-width:960px;margin:0 auto;padding:0 18px}
+
+/* ---------- header ---------- */
+header.hero{
+  background:linear-gradient(135deg,#1b2a4a 0%,#3a2f68 52%,#6b3fa0 100%);
+  color:#fff;padding:26px 0 22px;
+}
+.teacher{
+  font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;
+  color:#cbbde4;margin:0 0 8px;
+}
+header.hero h1{margin:0 0 6px;font-size:clamp(23px,4.4vw,34px);line-height:1.15}
+header.hero .sub{margin:0 0 16px;color:#ded5ee;max-width:62ch;font-size:15.5px}
+.metarow{display:flex;flex-wrap:wrap;gap:8px}
+.chip{
+  background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.22);
+  border-radius:999px;padding:4px 12px;font-size:12.5px;font-weight:600;color:#f0eaf9;
+}
+
+/* ---------- pill nav ---------- */
+nav.pills{
+  position:sticky;top:0;z-index:60;background:var(--card);
+  border-bottom:1px solid var(--line);box-shadow:0 2px 10px rgba(27,42,74,.06);
+}
+nav.pills .inner{
+  max-width:960px;margin:0 auto;padding:10px 12px;
+  display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+}
+nav.pills button{
+  flex:0 0 auto;font:inherit;font-size:13.5px;font-weight:600;cursor:pointer;
+  border:1.5px solid var(--line);background:var(--card);color:var(--ink-soft);
+  border-radius:999px;padding:7px 14px 7px 10px;display:flex;align-items:center;gap:8px;
+  white-space:nowrap;transition:border-color .15s,color .15s,background .15s;
+}
+nav.pills button:hover{border-color:var(--purple);color:var(--purple)}
+nav.pills button[aria-current="true"]{background:var(--purple);border-color:var(--purple);color:#fff}
+nav.pills .dot{
+  width:21px;height:21px;border-radius:50%;flex:0 0 auto;
+  display:inline-flex;align-items:center;justify-content:center;
+  background:var(--line-soft);color:var(--ink-faint);font-size:11.5px;font-weight:800;
+}
+nav.pills button[aria-current="true"] .dot{background:rgba(255,255,255,.25);color:#fff}
+nav.pills button.done .dot{background:var(--green);color:#fff}
+nav.pills button.done .dot .n{display:none}
+nav.pills button.done .dot::after{content:"\2713"}
+
+/* ---------- panes ---------- */
+section.pane{display:none}
+section.pane.on{display:block}
+h2.ptitle{
+  margin:24px 0 2px;font-size:23px;line-height:1.2;
+  display:flex;align-items:baseline;gap:11px;flex-wrap:wrap;
+}
+h2.ptitle .mins{
+  font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--amber);background:#fdf5e4;border:1px solid #f0dfba;
+  padding:2px 9px;border-radius:999px;
+}
+p.lede{color:var(--ink-soft);margin:6px 0 0;max-width:70ch}
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:22px 24px;box-shadow:var(--shadow);margin:18px 0;
+}
+.card.pad-sm{padding:16px 18px}
+h3{margin:0 0 10px;font-size:17px}
+h4{margin:18px 0 8px;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint)}
+
+.callout{
+  border-left:4px solid var(--purple);background:var(--lilac);
+  border-radius:0 10px 10px 0;padding:13px 16px;margin:14px 0;font-size:14.5px;color:#3b2d55;
+}
+.callout b,.callout strong{color:var(--purple)}
+.callout.amber{border-left-color:var(--amber);background:#fdf5e4;color:#5c4410}
+.callout.amber strong{color:var(--amber)}
+.callout.green{border-left-color:var(--green);background:#e8f6ee;color:#14532d}
+.callout.green strong{color:var(--green)}
+
+/* ---------- forms ---------- */
+label.fl{display:block;font-weight:600;font-size:14.5px;margin:14px 0 5px}
+label.fl .hint{display:block;font-weight:400;color:var(--ink-faint);font-size:12.8px;margin-top:2px}
+input[type=text],input[type=date],select,textarea{
+  width:100%;font:inherit;color:var(--ink);background:#fcfbfe;
+  border:1.5px solid var(--line);border-radius:10px;padding:9px 12px;
+}
+textarea{min-height:88px;resize:vertical;line-height:1.6}
+input:focus,select:focus,textarea:focus{
+  outline:none;border-color:var(--purple);box-shadow:0 0 0 3px rgba(107,63,160,.15);background:#fff;
+}
+.cnt{font-size:12.4px;color:var(--ink-faint);margin-top:4px}
+.cnt b{font-variant-numeric:tabular-nums}
+.cnt.ok{color:var(--green);font-weight:600}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:0 20px}
+@media(max-width:700px){.two{grid-template-columns:1fr}}
+
+.btn{
+  font:inherit;font-weight:600;font-size:14.5px;border-radius:10px;
+  padding:9px 17px;cursor:pointer;border:1.5px solid transparent;
+  display:inline-flex;align-items:center;gap:7px;
+}
+.btn.p{background:var(--purple);color:#fff}
+.btn.p:hover{background:#5a3489}
+.btn.g{background:#fff;border-color:var(--line);color:var(--ink)}
+.btn.g:hover{border-color:var(--purple);color:var(--purple)}
+.btn.sm{padding:6px 12px;font-size:13px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btnrow{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px;align-items:center}
+.navrow{display:flex;justify-content:space-between;gap:10px;margin:22px 0 46px}
+:focus-visible{outline:3px solid var(--purple);outline-offset:2px}
+
+/* ---------- gate banner ---------- */
+.gate{
+  display:flex;align-items:flex-start;gap:10px;font-size:14px;font-weight:600;
+  border-radius:12px;padding:11px 15px;margin-top:16px;
+}
+.gate.no{background:#fdf5e4;border:1px solid #f0dfba;color:#5c4410}
+.gate.yes{background:#e8f6ee;border:1px solid #b6e2c8;color:#14532d}
+.gate .ic{font-size:15px;line-height:1.4}
+
+/* ---------- flip cards ---------- */
+.deck{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-top:6px}
+.flip{
+  border:1.5px solid var(--line);border-radius:var(--r);background:var(--card);
+  padding:15px 16px;cursor:pointer;position:relative;min-height:104px;
+  display:flex;flex-direction:column;justify-content:center;
+}
+.flip:hover{border-color:var(--purple)}
+.flip.open{cursor:default;background:#fdfcff;border-color:var(--purple)}
+.flip .q{font-weight:600;font-size:14.5px}
+.flip .h{font-size:12.6px;color:var(--ink-faint);margin-top:5px}
+.flip .tap{font-size:12.4px;color:var(--purple);font-weight:600;margin-top:9px}
+.flip .fld{margin-top:10px;display:none}
+.flip.open .fld{display:block}
+.flip .tick{
+  position:absolute;top:10px;right:12px;width:20px;height:20px;border-radius:50%;
+  background:var(--green);color:#fff;display:none;align-items:center;justify-content:center;
+  font-size:11px;font-weight:800;
+}
+.flip.filled .tick{display:flex}
+.flip.filled{border-color:var(--green)}
+
+/* ---------- sorter ---------- */
+.sitem{
+  border:1.5px solid var(--line);border-radius:12px;padding:13px 15px;margin:10px 0;background:var(--card);
+}
+.sitem .stext{font-size:15px;margin-bottom:10px}
+.sitem .sbtns{display:flex;gap:8px;flex-wrap:wrap}
+.sitem.right{border-color:var(--green);background:#f2fbf6}
+.sitem.right .sbtns{display:none}
+.sitem .fb{margin-top:10px;font-size:14px;border-radius:9px;padding:10px 12px;display:none}
+.sitem .fb.on{display:block}
+.fb.bad{background:#fdeeeb;border:1px solid #f2c4bc;color:#8c2a1e}
+.fb.good{background:#e8f6ee;border:1px solid #b6e2c8;color:#14532d}
+.tag{display:inline-block;font-size:11.5px;font-weight:800;border-radius:6px;padding:2px 8px;letter-spacing:.04em}
+.tag.w{background:#fdeeeb;color:var(--red)}
+.tag.o{background:#e8f6ee;color:var(--green)}
+.score{font-size:14px;font-weight:700;color:var(--ink-soft);margin-top:12px}
+.score b{color:var(--purple);font-variant-numeric:tabular-nums}
+
+/* ---------- outcome checker ---------- */
+.obox{border:1.5px solid var(--line);border-radius:var(--r);padding:16px 18px;margin:14px 0;background:#fdfcff}
+.ohead{display:flex;align-items:center;gap:9px;margin-bottom:2px}
+.ohead .num{
+  width:25px;height:25px;border-radius:8px;background:var(--purple);color:#fff;
+  display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex:0 0 auto;
+}
+.ohead .lab{font-weight:700;font-size:15px}
+.ohead .stat{margin-left:auto;font-size:12.5px;font-weight:700}
+.stat.no{color:var(--amber)}
+.stat.yes{color:var(--green)}
+.checks{margin-top:11px;font-size:13.8px;display:none}
+.checks.on{display:block}
+.checks ul{margin:6px 0 0;padding-left:19px}
+.checks li{margin:3px 0}
+.checks li.p{color:var(--green)}
+.checks li.f{color:var(--amber)}
+
+/* ---------- timeline ---------- */
+.tl{display:flex;align-items:stretch;gap:0;margin:14px 0 6px;overflow-x:auto;padding-bottom:6px}
+.tl .node{
+  flex:1 1 0;min-width:112px;text-align:center;position:relative;padding:0 4px;
+}
+.tl .node::before{
+  content:"";position:absolute;top:13px;left:0;right:0;height:2px;background:var(--line);z-index:0;
+}
+.tl .node:first-child::before{left:50%}
+.tl .node:last-child::before{right:50%}
+.tl .dotm{
+  width:26px;height:26px;border-radius:50%;background:#fff;border:2.5px solid var(--line);
+  margin:0 auto 7px;position:relative;z-index:1;display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:800;color:var(--ink-faint);
+}
+.tl .node.fill .dotm{background:var(--green);border-color:var(--green);color:#fff}
+.tl .node.goal .dotm{background:var(--purple);border-color:var(--purple);color:#fff}
+.tl .mo{font-size:11.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint)}
+.tl .txt{font-size:12.4px;color:var(--ink-soft);margin-top:3px;line-height:1.4}
+
+/* ---------- simulator ---------- */
+.sim{border:2px solid var(--navy);border-radius:var(--r);overflow:hidden;margin-top:16px}
+.sim .bar{
+  background:var(--navy);color:#fff;padding:9px 15px;font-size:13px;font-weight:700;
+  display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;
+}
+.sim .bar .stamp{font-family:Consolas,"Courier New",monospace;font-size:12.5px;color:#a9b8d6}
+.sim .body{padding:16px 18px;background:#fbfaff}
+.sim .quote{
+  font-family:Consolas,"Courier New",monospace;font-size:13.5px;background:#fff;
+  border:1px solid var(--line);border-left:4px solid var(--purple);
+  border-radius:0 8px 8px 0;padding:11px 13px;margin:10px 0;white-space:pre-wrap;color:#33405e;
+}
+.sim .ask{font-weight:600;margin-top:12px;font-size:14.5px}
+
+/* ---------- quiz ---------- */
+.q{border-top:1px solid var(--line-soft);padding-top:16px;margin-top:16px}
+.q:first-child{border-top:0;padding-top:0;margin-top:0}
+.qh{font-weight:600;font-size:15.5px;margin:0 0 9px}
+.qh .qn{color:var(--purple);font-weight:800;margin-right:6px}
+.opts{display:flex;flex-direction:column;gap:7px}
+.opt{
+  display:flex;gap:9px;align-items:flex-start;border:1.5px solid var(--line);
+  border-radius:10px;padding:10px 13px;cursor:pointer;font-size:14.6px;background:#fcfbfe;
+}
+.opt:hover{border-color:var(--purple);background:var(--lilac)}
+.opt input{margin-top:4px;flex:0 0 auto}
+.opt.hit{border-color:var(--green);background:#e8f6ee}
+.opt.miss{border-color:var(--red);background:#fdeeeb}
+.opt.lock{cursor:default;opacity:.72}
+.qfb{font-size:14px;margin-top:9px;border-radius:9px;padding:10px 13px;display:none}
+.qfb.on{display:block}
+.qfb.good{background:#e8f6ee;border:1px solid #b6e2c8;color:#14532d}
+.qfb.bad{background:#fdf5e4;border:1px solid #f0dfba;color:#5c4410}
+.qfb.out{background:#fdeeeb;border:1px solid #f2c4bc;color:#8c2a1e}
+
+/* ---------- notebook ---------- */
+.nb{border:2px solid var(--purple);border-radius:var(--r);overflow:hidden;margin-top:22px;display:none}
+.nb.on{display:block}
+.nb .nbh{background:var(--purple);color:#fff;padding:13px 18px}
+.nb .nbh h3{margin:0;font-size:17px;color:#fff}
+.nb .nbh p{margin:3px 0 0;font-size:13px;color:#e5d9f5}
+.nb .nbb{padding:18px 20px;background:var(--lilac)}
+.nb .row{display:flex;gap:12px;align-items:baseline;padding:8px 0;border-bottom:1px solid #e2d6f0;font-size:14.4px}
+.nb .row:last-of-type{border-bottom:0}
+.nb .row .k{font-weight:700;color:var(--purple);min-width:118px;flex:0 0 auto}
+.scoreBig{font-size:30px;font-weight:800;color:var(--purple);font-variant-numeric:tabular-nums}
+#doc{
+  white-space:pre-wrap;font-family:Consolas,"Courier New",monospace;font-size:12.8px;line-height:1.65;
+  background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 18px;
+  max-height:420px;overflow:auto;color:#33405e;margin-top:12px;
+}
+.flash{font-size:13.4px;font-weight:700;color:var(--green);opacity:0;transition:opacity .2s}
+.flash.on{opacity:1}
+
+footer.foot{
+  text-align:center;color:var(--ink-faint);font-size:12.8px;
+  padding:26px 18px 40px;border-top:1px solid var(--line);
+}
+@media print{
+  header.hero,nav.pills,.navrow,.btnrow,.gate,footer.foot,.no-print{display:none!important}
+  section.pane{display:none!important}
+  section.pane#p6{display:block!important}
+  .card,.nb{border:0;box-shadow:none;padding:0}
+  #doc{border:0;max-height:none;overflow:visible;font-size:10.5pt}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="teacher">Mr. Babb &middot; College &amp; Career Readiness &middot; Unit 1, Activity 1.1.1</p>
+    <h1>Letter to Your Future Self</h1>
+    <p class="sub">Name the outcomes you want out of senior year, work each one backwards into checkpoints you can actually hit, and seal it inside a letter you open in May.</p>
+    <div class="metarow">
+      <span class="chip">90-minute block</span>
+      <span class="chip">Grade 12</span>
+      <span class="chip">6 sections</span>
+      <span class="chip">Turn in digitally</span>
+    </div>
+  </div>
+</header>
+
+<nav class="pills" aria-label="Lesson sections"><div class="inner" id="pillbar"></div></nav>
+
+<div class="wrap">
+
+<!-- ============ 1 ============ -->
+<section class="pane on" id="p1">
+  <h2 class="ptitle">Why this letter <span class="mins">8 min</span></h2>
+  <p class="lede">Read this part before you type anything.</p>
+
+  <div class="card">
+    <h3>Senior year is not one year</h3>
+    <p>It is four. The fall where everything is due at once. The winter where you are waiting to hear back. The spring where half your class checks out. And the last three weeks where all of it lands at the same time.</p>
+    <p>The version of you sitting here in August has something the May version will not have: <strong>you can still see the whole year at once.</strong> You know what you actually want out of it. By April that gets buried under deadlines, decisions, and other people's opinions about your life.</p>
+    <p>So write it down now, while it is clear. This letter is not a diary entry. It is <strong>evidence</strong> &mdash; a record of what you said mattered, before the year had a chance to talk you out of it.</p>
+
+    <div class="callout">
+      <strong>What you are building today.</strong> Three outcomes you want by June, each one worked backwards into November, January, and April checkpoints, wrapped in a letter to yourself. We open the checkpoints at every marking period. You get the letter back in May.
+    </div>
+
+    <div class="two">
+      <div>
+        <label class="fl" for="sName">Your name
+          <span class="hint">Exactly how you want it on the letter.</span></label>
+        <input type="text" id="sName" placeholder="First and last name">
+      </div>
+      <div>
+        <label class="fl" for="sDate">The day this gets opened
+          <span class="hint">Last week of school, or graduation day.</span></label>
+        <input type="date" id="sDate" value="2027-05-28">
+      </div>
+    </div>
+
+    <h4>Quick check</h4>
+    <div id="qc1"></div>
+
+    <div class="gate no" id="g1"><span class="ic">&#9679;</span><span></span></div>
+    <div class="navrow"><span></span><button class="btn p" data-go="2">Next: Time Capsule &rarr;</button></div>
+  </div>
+</section>
+
+<!-- ============ 2 ============ -->
+<section class="pane" id="p2">
+  <h2 class="ptitle">Time capsule <span class="mins">10 min</span></h2>
+  <p class="lede">Seven cards. Tap one to open it and answer. First honest thing you think of &mdash; the May version of you will care about accuracy, not polish.</p>
+
+  <div class="card">
+    <div class="deck" id="deck"></div>
+    <div class="gate no" id="g2"><span class="ic">&#9679;</span><span></span></div>
+    <div class="navrow">
+      <button class="btn g" data-go="1">&larr; Back</button>
+      <button class="btn p" data-go="3">Next: Wish or Outcome &rarr;</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3 ============ -->
+<section class="pane" id="p3">
+  <h2 class="ptitle">Wish or outcome <span class="mins">18 min</span></h2>
+  <p class="lede">First sort eight statements other students wrote. Then write three of your own that survive the same test.</p>
+
+  <div class="card">
+    <h3>Part A &mdash; Sort all eight</h3>
+    <p style="margin-top:0;color:var(--ink-soft);font-size:14.6px">A <span class="tag w">WISH</span> names a direction. An <span class="tag o">OUTCOME</span> names a finished result someone else could check. Get all eight right to unlock Part&nbsp;B.</p>
+    <div id="sorter"></div>
+    <div class="score" id="sortScore">Sorted <b>0</b> of 8</div>
+  </div>
+
+  <div class="card" id="partB">
+    <h3>Part B &mdash; Write your three</h3>
+    <p style="margin-top:0;color:var(--ink-soft);font-size:14.6px">Write each one in June-tense, as though it already happened. The checker looks for six things.</p>
+    <div id="obuild"></div>
+    <div class="btnrow no-print">
+      <button class="btn g sm" id="checkAllBtn">Check all three</button>
+      <span class="flash" id="checkFlash">Checked &mdash; read the notes under each one.</span>
+    </div>
+    <div class="callout"><strong>The checker is a mirror, not a grade.</strong> It can see whether an outcome is countable, deadlined, and provable. It cannot see whether it matters to you. That part is the "why this one" box, and that is the part that decides whether you are still doing this in February.</div>
+    <div class="gate no" id="g3"><span class="ic">&#9679;</span><span></span></div>
+    <div class="navrow">
+      <button class="btn g" data-go="2">&larr; Back</button>
+      <button class="btn p" data-go="4">Next: Backwards Planner &rarr;</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4 ============ -->
+<section class="pane" id="p4">
+  <h2 class="ptitle">Backwards planner <span class="mins">16 min</span></h2>
+  <p class="lede">An outcome without a plan is a wish with better grammar. Start at June and walk backwards: where does this have to be in April, in January, in November?</p>
+
+  <div class="card pad-sm">
+    <p style="margin:0;font-size:14.4px;color:var(--ink-soft)"><strong style="color:var(--purple)">Worked example.</strong> JUNE: Statistics finished at 85+ &nbsp;&larr;&nbsp; APRIL: 85+ average going into the last marking period &nbsp;&larr;&nbsp; JANUARY: no missing assignments, B on the midterm &nbsp;&larr;&nbsp; NOVEMBER: tutoring every Tuesday, first quarter above 80.</p>
+  </div>
+
+  <div id="planner"></div>
+
+  <div class="card">
+    <h3>Checkpoint simulator</h3>
+    <p style="margin-top:0;color:var(--ink-soft);font-size:14.6px">Now jump forward and stand at each checkpoint. If a milestone is too vague to judge, you will find out here instead of in November.</p>
+    <div class="sim">
+      <div class="bar"><span id="simTitle">Simulator ready</span><span class="stamp" id="simStamp">--</span></div>
+      <div class="body" id="simBody">
+        <p style="margin:0;font-size:14.5px;color:var(--ink-soft)">Fill in all three plans above, then run the simulator.</p>
+        <div class="btnrow"><button class="btn p" id="simRun">Run the simulator</button></div>
+      </div>
+    </div>
+    <div class="gate no" id="g4"><span class="ic">&#9679;</span><span></span></div>
+    <div class="navrow">
+      <button class="btn g" data-go="3">&larr; Back</button>
+      <button class="btn p" data-go="5">Next: The Letter &rarr;</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5 ============ -->
+<section class="pane" id="p5">
+  <h2 class="ptitle">The letter <span class="mins">22 min</span></h2>
+  <p class="lede">Five paragraphs, written to a real person &mdash; because you are. The word counts are floors, not ceilings.</p>
+
+  <div class="callout amber no-print"><strong>Nothing here saves.</strong> This page keeps your work only while the tab is open. Do not refresh and do not close it. When the letter is done, use <b>Copy everything</b> at the bottom and paste it into the assignment before you leave.</div>
+
+  <div class="card">
+    <div id="paras"></div>
+    <div class="callout"><strong>Stuck on paragraph 4?</strong> Finish one of these: <span class="mono">You are allowed to&hellip;</span> &nbsp;&middot;&nbsp; <span class="mono">It is not going to matter that&hellip;</span> &nbsp;&middot;&nbsp; <span class="mono">Call ______ before you decide anything.</span> &nbsp;&middot;&nbsp; <span class="mono">The reason you started this was&hellip;</span></div>
+  </div>
+
+  <div class="card">
+    <h3>Call your shots</h3>
+    <p style="margin-top:0;color:var(--ink-soft);font-size:14.6px">Five predictions. In May you score them and find out how well you actually know yourself. Set the percentages honestly, not optimistically &mdash; if you say 90% five times, roughly four or five should come true.</p>
+    <div id="preds"></div>
+  </div>
+
+  <div class="card">
+    <h3>Seven-day commitment</h3>
+    <label class="fl" for="commit">The one thing you are doing about this within seven days
+      <span class="hint">Not the outcome &mdash; the first move. Specific, small, and on a day you can name.</span></label>
+    <input type="text" id="commit" placeholder="e.g. Email Ms. Rivera about the internship application by Friday">
+    <div class="gate no" id="g5"><span class="ic">&#9679;</span><span></span></div>
+    <div class="navrow">
+      <button class="btn g" data-go="4">&larr; Back</button>
+      <button class="btn p" data-go="6">Next: Exit Ticket &rarr;</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6 ============ -->
+<section class="pane" id="p6">
+  <h2 class="ptitle">Exit ticket <span class="mins">10 min</span></h2>
+  <p class="lede no-print">Eight questions. You get one retry on each. Wrong answers will tell you what to look at again, not what the answer is.</p>
+
+  <div class="card no-print">
+    <div id="quiz"></div>
+    <div class="score" id="quizScore">Answered <b>0</b> of 8</div>
+  </div>
+
+  <div class="nb" id="notebook">
+    <div class="nbh">
+      <h3>CCR Notebook &mdash; Activity 1.1.1</h3>
+      <p>Mr. Babb &middot; College &amp; Career Readiness &middot; Letter to Your Future Self</p>
+    </div>
+    <div class="nbb">
+      <div class="row"><span class="k">Exit ticket</span><span><span class="scoreBig" id="nbScore">0</span> <span style="color:var(--ink-soft)">/ 8 on the first try</span></span></div>
+      <div class="row"><span class="k">Big idea</span><span>An outcome names a finished result someone else could check. A wish names a direction. Only one of them can be missed on purpose.</span></div>
+      <div class="row"><span class="k">The method</span><span>Start at the end, then work backwards. June &rarr; April &rarr; January &rarr; November. Checkpoints are how you find out you are off track while you can still do something about it.</span></div>
+      <div class="row"><span class="k">The habit</span><span>If&ndash;then beats willpower. Decide the response now, while you are calm, so you are not deciding it while tired and behind.</span></div>
+      <div class="row"><span class="k">Your outcomes</span><span id="nbOut">&mdash;</span></div>
+      <div class="row"><span class="k">First move</span><span id="nbMove">&mdash;</span></div>
+      <div class="row"><span class="k">Next checkpoint</span><span id="nbNext">&mdash;</span></div>
+
+      <h4 style="margin-top:18px">Everything you wrote &mdash; copy this into the assignment</h4>
+      <div id="doc">Finish the exit ticket and your full document appears here.</div>
+      <div class="btnrow no-print">
+        <button class="btn p" id="copyBtn">Copy everything</button>
+        <button class="btn g" id="printBtn">Print / save as PDF</button>
+        <span class="flash" id="copyFlash">Copied.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="gate no" id="g6" style="margin-top:16px"><span class="ic">&#9679;</span><span></span></div>
+  <div class="navrow"><button class="btn g" data-go="5">&larr; Back</button><span></span></div>
+</section>
+
+</div>
+
+<footer class="foot">Mr. Babb &middot; College &amp; Career Readiness &middot; CCR 1.1.1 &middot; Runs offline. Nothing you type is sent anywhere &mdash; and nothing is saved, so copy your work before you close the tab.</footer>
+
+<script>
+(function(){
+"use strict";
+
+/* ============ helpers ============ */
+function $(id){ return document.getElementById(id); }
+function mk(tag, attrs, html){
+  var n = document.createElement(tag);
+  if(attrs) for(var k in attrs) n.setAttribute(k, attrs[k]);
+  if(html !== undefined) n.innerHTML = html;
+  return n;
+}
+function v(id){ var n = $(id); return n ? String(n.value||"").trim() : ""; }
+function words(s){ s = String(s||"").trim(); return s ? s.split(/\s+/).length : 0; }
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function ordered(list, ord){
+  if(!ord) return list;
+  var by = {};
+  list.forEach(function(o){ by[o.id] = o; });
+  return ord.map(function(k){ return by[k]; }).filter(Boolean);
+}
+
+/* answers are stored as hashes so the key is not readable in view-source */
+var SALT = "mb-ccr-111";
+function hsh(s){
+  var x = 5381;
+  for(var i=0;i<s.length;i++){ x = (((x<<5)+x) ^ s.charCodeAt(i)) >>> 0; }
+  return x.toString(16);
+}
+function keyOf(q, opt){ return hsh(SALT + "|" + q + "|" + opt); }
+var KEY = {
+  qc1:"51be5488",
+  s1:"e2c99f0e", s2:"22a762e2", s3:"d5175f4c", s4:"82d1164",
+  s5:"da015d8a", s6:"5d0b01e6", s7:"cc4f1dc8", s8:"7d333668",
+  x1:"e37774e2", x2:"e37789e1", x3:"e3778de0", x4:"e37781e7",
+  x5:"e37764e7", x6:"e37779e4", x7:"e3777de5", x8:"e37771ea"
+};
+function isRight(q, opt){ return keyOf(q, opt) === KEY[q]; }
+
+/* ============ sections + gating ============ */
+var SECTIONS = [
+  { id:"p1", label:"Why", gate:gate1 },
+  { id:"p2", label:"Time Capsule", gate:gate2 },
+  { id:"p3", label:"Wish or Outcome", gate:gate3 },
+  { id:"p4", label:"Backwards Plan", gate:gate4 },
+  { id:"p5", label:"The Letter", gate:gate5 },
+  { id:"p6", label:"Exit Ticket", gate:gate6 }
+];
+var cur = 1;
+
+function buildPills(){
+  var host = $("pillbar");
+  SECTIONS.forEach(function(s, i){
+    var n = i + 1;
+    var b = mk("button", { type:"button", "data-step":n, "aria-current": n===1?"true":"false" });
+    b.appendChild(mk("span", { "class":"dot" }, '<span class="n">'+n+'</span>'));
+    b.appendChild(document.createTextNode(s.label));
+    b.addEventListener("click", function(){ go(n); });
+    host.appendChild(b);
+  });
+}
+function go(n){
+  if(n < 1 || n > SECTIONS.length) return;
+  cur = n;
+  SECTIONS.forEach(function(s, i){ $(s.id).classList.toggle("on", i+1 === n); });
+  var bs = $("pillbar").querySelectorAll("button");
+  for(var i=0;i<bs.length;i++) bs[i].setAttribute("aria-current", (i+1)===n ? "true":"false");
+  window.scrollTo({ top:0, behavior:"smooth" });
+  refresh();
+}
+document.addEventListener("click", function(e){
+  var t = e.target.closest ? e.target.closest("[data-go]") : null;
+  if(t) go(parseInt(t.getAttribute("data-go"),10));
+});
+
+/* each gate returns {ok:bool, msg:string} — nothing is gated on clicking Next */
+function setGate(id, r){
+  var el = $(id);
+  if(!el) return;
+  el.className = "gate " + (r.ok ? "yes" : "no");
+  el.querySelector(".ic").innerHTML = r.ok ? "&#10003;" : "&#9679;";
+  el.querySelector("span:last-child").textContent = r.msg;
+}
+function refresh(){
+  var bs = $("pillbar").querySelectorAll("button");
+  SECTIONS.forEach(function(s, i){
+    var r = s.gate();
+    setGate("g" + (i+1), r);
+    bs[i].classList.toggle("done", r.ok);
+  });
+}
+
+/* ============ 1 · quick check ============ */
+var QC = {
+  ord:["a","d","b","c"],
+  q: "Why does the August version of you have something the May version will not?",
+  opts: [
+    { id:"a", t:"August you has more free time than May you." },
+    { id:"b", t:"August you can still see the whole year at once, before the deadlines bury it." },
+    { id:"c", t:"August you is more optimistic than May you." },
+    { id:"d", t:"August you already knows how the year is going to turn out." }
+  ],
+  fb: {
+    a: "Time is not what the opening section is about. Reread the second paragraph and look for what August you can still <em>see</em>, not what August you has more of.",
+    b: "Perspective without exhaustion. In August the whole year is still in view, so you can name what you actually want from it. By April that view is gone, buried under whatever is due next.",
+    c: "Check whether the reading ever claims August you is happier or more hopeful. Look instead at what August you is able to see that May you cannot.",
+    d: "Look again at the last paragraph &mdash; it calls the letter evidence, not a prediction. Ask yourself what evidence is for if you already knew the ending."
+  }
+};
+var qc1Answered = false, qc1Right = false, qc1Tries = 0;
+
+function buildQC(){
+  var host = $("qc1");
+  var wrap = mk("div", { "class":"q" });
+  wrap.appendChild(mk("p", { "class":"qh" }, QC.q));
+  var opts = mk("div", { "class":"opts" });
+  ordered(QC.opts, QC.ord).forEach(function(o){
+    var lab = mk("label", { "class":"opt" });
+    var inp = mk("input", { type:"radio", name:"qc1", value:o.id });
+    lab.appendChild(inp);
+    lab.appendChild(mk("span", {}, o.t));
+    inp.addEventListener("change", function(){ answerQC(o.id, opts, lab); });
+    opts.appendChild(lab);
+  });
+  wrap.appendChild(opts);
+  wrap.appendChild(mk("div", { "class":"qfb", id:"qc1fb" }));
+  host.appendChild(wrap);
+}
+function answerQC(id, opts, lab){
+  var fb = $("qc1fb");
+  qc1Tries++;
+  var right = isRight("qc1", id);
+  qc1Answered = true;
+  if(right){
+    qc1Right = true;
+    lab.classList.add("hit");
+    opts.querySelectorAll("input").forEach(function(i){ i.disabled = true; });
+    opts.querySelectorAll(".opt").forEach(function(o){ o.classList.add("lock"); });
+    fb.className = "qfb good on";
+    fb.innerHTML = "<strong>That's it.</strong> " + QC.fb[id];
+  } else {
+    lab.classList.add("miss");
+    fb.className = "qfb bad on";
+    fb.innerHTML = "<strong>Not that one &mdash; try again.</strong> " + QC.fb[id];
+  }
+  refresh();
+}
+function gate1(){
+  var okName = v("sName").length >= 2, okDate = v("sDate").length > 0;
+  if(!okName) return { ok:false, msg:"Add your name above." };
+  if(!okDate) return { ok:false, msg:"Set the date this letter gets opened." };
+  if(!qc1Right) return { ok:false, msg:"Answer the quick check correctly to finish this section." };
+  return { ok:true, msg:"Section complete. Your checkmark is up." };
+}
+
+/* ============ 2 · time capsule ============ */
+var CARDS = [
+  { id:"c1", q:"One word for how senior year feels right now", h:"Not the word you'd say out loud. The real one.", type:"text", min:2 },
+  { id:"c2", q:"What you say when adults ask about after graduation", h:'Your current answer, even if it is "I don\'t know yet."', type:"text", min:3 },
+  { id:"c3", q:"Something you are quietly proud of", h:"It does not have to be on a transcript. Most of the real ones are not. 12+ words.", type:"area", min:12 },
+  { id:"c4", q:"The thing about this year you are actually worried about", h:"Naming it now is the point. In May you'll see whether it was the real problem. 12+ words.", type:"area", min:12 },
+  { id:"c5", q:"What you are genuinely looking forward to", h:"8+ words.", type:"area", min:8 },
+  { id:"c6", q:"One person who is in your corner right now", h:"A name, or who they are to you.", type:"text", min:2 },
+  { id:"c7", q:"A song, show, or game you are into this month", h:"Time capsule detail. In May this is funnier than you expect.", type:"text", min:2 }
+];
+function cardFilled(c){
+  var val = v(c.id);
+  return c.type === "area" ? words(val) >= c.min : val.length >= c.min;
+}
+function buildDeck(){
+  var host = $("deck");
+  CARDS.forEach(function(c){
+    var card = mk("div", { "class":"flip", "data-card":c.id, tabindex:"0", role:"button" });
+    card.appendChild(mk("span", { "class":"tick" }, "&#10003;"));
+    card.appendChild(mk("div", { "class":"q" }, c.q));
+    card.appendChild(mk("div", { "class":"h" }, c.h));
+    var tap = mk("div", { "class":"tap" }, "Tap to answer");
+    card.appendChild(tap);
+    var fld = mk("div", { "class":"fld" });
+    var input = c.type === "area"
+      ? mk("textarea", { id:c.id, rows:"3", placeholder:"Type here" })
+      : mk("input", { type:"text", id:c.id, placeholder:"Type here" });
+    fld.appendChild(input);
+    if(c.type === "area") fld.appendChild(mk("div", { "class":"cnt", "data-for":c.id }));
+    card.appendChild(fld);
+    function open(){
+      if(card.classList.contains("open")) return;
+      card.classList.add("open");
+      tap.style.display = "none";
+      input.focus();
+    }
+    card.addEventListener("click", open);
+    card.addEventListener("keydown", function(e){ if(e.key === "Enter" || e.key === " "){ e.preventDefault(); open(); } });
+    input.addEventListener("click", function(e){ e.stopPropagation(); });
+    input.addEventListener("input", function(){
+      card.classList.toggle("filled", cardFilled(c));
+      if(c.type === "area"){
+        var out = card.querySelector('.cnt[data-for="'+c.id+'"]');
+        var w = words(input.value);
+        out.className = "cnt" + (w >= c.min ? " ok" : "");
+        out.innerHTML = "<b>"+w+"</b> words" + (w >= c.min ? " &middot; enough" : " &middot; aim for "+c.min);
+      }
+      refresh();
+    });
+    host.appendChild(card);
+  });
+}
+function gate2(){
+  var missing = CARDS.filter(function(c){ return !cardFilled(c); }).length;
+  if(missing) return { ok:false, msg: missing + (missing === 1 ? " card still needs an answer." : " cards still need answers.") };
+  return { ok:true, msg:"All seven cards answered. Checkmark is up." };
+}
+
+/* ============ 3 · sorter + outcome builder ============ */
+var SORT = [
+  { id:"s1", t:"I'm going to try to get better grades this semester.",
+    fbW:"“Try” names an effort, and “better” has no starting point &mdash; there is nothing here a report card could confirm.",
+    fbO:"Look at the verb, then look for a number. Trying is something you do, not something that finishes. Ask what a report card would have to say in June for this to count." },
+  { id:"s2", t:"Both semesters of Statistics finished at 85 or above by June.",
+    fbW:"Count what is actually in the sentence: an amount (85), a deadline (June), and a document that would settle it. How many of the three does a wish usually have?",
+    fbO:"Amount, deadline, and a report card that settles it — someone other than the writer could check this one." },
+  { id:"s3", t:"I want to be more organized this year.",
+    fbW:"“More organized” than what? No starting point, no finish line, and nothing anyone could look at in June.",
+    fbO:"Ask yourself what you would look at in June to decide whether this happened. If you cannot name the thing you would look at, check which pile it belongs in." },
+  { id:"s4", t:"Three scholarship applications submitted before December 15.",
+    fbW:"Read it again and count the specifics: how many applications, and by what date? Then decide whether that is a direction or a destination.",
+    fbO:"Three, by December 15, and the confirmation emails prove it." },
+  { id:"s5", t:"Be a better version of myself by June.",
+    fbW:"It has a deadline, but nothing countable and nothing provable — a deadline alone does not make an outcome.",
+    fbO:"It does have a deadline, so that part fooled you. Now look for the other two: what is countable here, and what would prove it?" },
+  { id:"s6", t:"Two campus visits done and one program ruled out by January 15.",
+    fbW:"Being undecided is allowed. Check whether the sentence still names an amount, a date, and something you could show someone.",
+    fbO:"Even with the future undecided, this names an amount, a date, and notes you could show someone." },
+  { id:"s7", t:"Get serious about my future.",
+    fbW:"Serious how, about what, by when? Nothing here could be marked hit or missed.",
+    fbO:"Try to imagine grading this in June. If you cannot picture what would count as done, look at the other pile." },
+  { id:"s8", t:"In bed by 11:30 on school nights, four nights a week, starting in October.",
+    fbW:"It is about sleep rather than school, but that is not the test. Check it for an amount, a start date, and something that could show it happened.",
+    fbO:"A time, a frequency, and a start date — a screen-time log or a habit tracker would settle it." }
+];
+var sortDone = {};
+function buildSorter(){
+  var host = $("sorter");
+  SORT.forEach(function(it){
+    var box = mk("div", { "class":"sitem", id:"box_"+it.id });
+    box.appendChild(mk("div", { "class":"stext" }, "&ldquo;" + it.t + "&rdquo;"));
+    var btns = mk("div", { "class":"sbtns" });
+    [["wish","Wish"],["outcome","Outcome"]].forEach(function(pair){
+      var b = mk("button", { "class":"btn g sm", type:"button" }, pair[1]);
+      b.addEventListener("click", function(){ sortAnswer(it, pair[0], box); });
+      btns.appendChild(b);
+    });
+    box.appendChild(btns);
+    box.appendChild(mk("div", { "class":"fb", id:"fb_"+it.id }));
+    host.appendChild(box);
+  });
+}
+function sortAnswer(it, choice, box){
+  var fb = $("fb_"+it.id);
+  var right = isRight(it.id, choice);
+  var text = choice === "wish" ? it.fbW : it.fbO;
+  if(right){
+    sortDone[it.id] = true;
+    box.classList.add("right");
+    fb.className = "fb good on";
+    fb.innerHTML = '<span class="tag ' + (choice==="wish"?"w":"o") + '">' + choice.toUpperCase() + "</span> " + text;
+  } else {
+    fb.className = "fb bad on";
+    fb.innerHTML = "<strong>Not this pile.</strong> " + text;
+  }
+  var n = Object.keys(sortDone).length;
+  $("sortScore").innerHTML = "Sorted <b>" + n + "</b> of 8";
+  refresh();
+}
+
+var AREAS = [
+  "Academic — grades, classes, credits",
+  "Pathway — college, certification, military, trade, work",
+  "Skill — something you want to be able to do",
+  "Personal — health, money, habits, relationships",
+  "Contribution — team, family, community, someone else"
+];
+var OUTS = [
+  { n:1, def:0, ph:"What is true about your classes in June?" },
+  { n:2, def:1, ph:"What is locked in about your next step by graduation?" },
+  { n:3, def:3, ph:"What is true about you, not your transcript?" }
+];
+function buildOutcomes(){
+  var host = $("obuild");
+  OUTS.forEach(function(g){
+    var box = mk("div", { "class":"obox" });
+    var head = mk("div", { "class":"ohead" });
+    head.appendChild(mk("span", { "class":"num" }, String(g.n)));
+    head.appendChild(mk("span", { "class":"lab" }, "Outcome " + g.n));
+    head.appendChild(mk("span", { "class":"stat no", id:"stat"+g.n }, "0 of 6"));
+    box.appendChild(head);
+
+    box.appendChild(mk("label", { "class":"fl", "for":"gd"+g.n }, "Area of your life"));
+    var sel = mk("select", { id:"gd"+g.n });
+    AREAS.forEach(function(a, i){
+      var o = mk("option", { value:a }, a);
+      if(i === g.def) o.setAttribute("selected","selected");
+      sel.appendChild(o);
+    });
+    box.appendChild(sel);
+
+    box.appendChild(mk("label", { "class":"fl", "for":"gt"+g.n },
+      'The outcome, written as already finished <span class="hint">One sentence in June-tense. Put a countable amount and a deadline in it.</span>'));
+    var ta = mk("textarea", { id:"gt"+g.n, rows:"2", placeholder:g.ph });
+    box.appendChild(ta);
+
+    box.appendChild(mk("label", { "class":"fl", "for":"ge"+g.n },
+      'Proof <span class="hint">The document, number, or moment that would settle it &mdash; a report card, an acceptance letter, a certificate, a log.</span>'));
+    box.appendChild(mk("input", { type:"text", id:"ge"+g.n, placeholder:"I will know this happened because…" }));
+
+    box.appendChild(mk("label", { "class":"fl", "for":"gw"+g.n },
+      'Why this one <span class="hint">One line. In February this is the only part that still matters.</span>'));
+    box.appendChild(mk("input", { type:"text", id:"gw"+g.n, placeholder:"This matters to me because…" }));
+
+    box.appendChild(mk("div", { "class":"checks", id:"chk"+g.n }));
+    var row = mk("div", { "class":"btnrow no-print" });
+    var b = mk("button", { "class":"btn g sm", type:"button" }, "Check outcome " + g.n);
+    b.addEventListener("click", function(){ checkOutcome(g.n, true); });
+    row.appendChild(b);
+    box.appendChild(row);
+    host.appendChild(box);
+  });
+}
+function outcomeChecks(n){
+  var t = v("gt"+n), proof = v("ge"+n), why = v("gw"+n);
+  var hasNum = /\d/.test(t) || /\b(all|every|each|both|daily|weekly|straight)\b/i.test(t);
+  var hasWhen = /\b(by|before|semester|quarter|winter|spring|fall|summer|graduation|20\d\d)\b/i.test(t)
+             || /\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\b/i.test(t)
+             || /(end of|marking period)/i.test(t);
+  var hedge = /\b(try|hopefully|maybe|kind of|a bit|somewhat|more|better)\b/i.test(t);
+  return [
+    { ok: words(t) >= 8, t:"Written as a full sentence.", f:"Too short to judge. Write it as a full sentence: what is finished, how much, and by when." },
+    { ok: hasNum, t:"Something countable is in here.", f:"No amount. How much, how many, how often? A checker cannot count “some.”" },
+    { ok: hasWhen, t:"There is a deadline.", f:"No deadline. Add a date, a month, or a marking period." },
+    { ok: proof.length >= 6, t:"Proof named.", f:"No proof. Name the thing you would point at in June to settle it." },
+    { ok: why.length >= 8, t:"You said why it matters.", f:"No reason given. Why this one and not something else?" },
+    { ok: !hedge, t:"Written as a result, not an attempt.", f:"There is a hedge in here — try, more, better, maybe. Rewrite it as the finished result." }
+  ];
+}
+function checkOutcome(n, show){
+  var items = outcomeChecks(n);
+  var pass = items.filter(function(i){ return i.ok; }).length;
+  var st = $("stat"+n);
+  st.textContent = pass + " of 6";
+  st.className = "stat " + (pass === 6 ? "yes" : "no");
+  var out = $("chk"+n);
+  var lis = items.map(function(i){
+    return '<li class="' + (i.ok ? "p" : "f") + '">' + (i.ok ? "✓ " + i.t : "• " + i.f) + "</li>";
+  }).join("");
+  out.innerHTML = (pass === 6 ? "<strong>All six checks passed.</strong>" : "<strong>Sharpen these:</strong>") + "<ul>" + lis + "</ul>";
+  if(show) out.classList.add("on");
+  return pass === 6;
+}
+function outcomeOK(n){ return outcomeChecks(n).every(function(i){ return i.ok; }); }
+function gate3(){
+  var sorted = Object.keys(sortDone).length;
+  if(sorted < 8) return { ok:false, msg:"Part A: " + (8 - sorted) + " statement" + (sorted === 7 ? "" : "s") + " still to sort correctly." };
+  var bad = [1,2,3].filter(function(n){ return !outcomeOK(n); });
+  if(bad.length) return { ok:false, msg:"Part B: outcome " + bad.join(", ") + " not passing all six checks yet." };
+  return { ok:true, msg:"Eight sorted and three outcomes clean. Checkmark is up." };
+}
+
+/* ============ 4 · backwards planner ============ */
+var STAGES = [
+  { k:"m1", mo:"Nov", full:"By the end of the first marking period (November)", h:"Ten weeks in. What has to be true for this to still be possible?" },
+  { k:"m2", mo:"Jan", full:"By the end of the first semester (January)", h:"Halfway. What is finished, submitted, or locked in?" },
+  { k:"m3", mo:"Apr", full:"By the end of April", h:"Last chance to fix anything. What state is it in going into the final stretch?" }
+];
+function buildPlanner(){
+  var host = $("planner");
+  OUTS.forEach(function(g){
+    var card = mk("div", { "class":"card" });
+    var head = mk("div", { "class":"ohead" });
+    head.appendChild(mk("span", { "class":"num" }, String(g.n)));
+    head.appendChild(mk("span", { "class":"lab", id:"plab"+g.n }, "Outcome " + g.n));
+    card.appendChild(head);
+    card.appendChild(mk("p", { "class":"lede", id:"pecho"+g.n, style:"font-size:14.3px;margin:6px 0 0" },
+      "<em>Write this outcome in section 3 first.</em>"));
+
+    var tl = mk("div", { "class":"tl", id:"tl"+g.n });
+    card.appendChild(tl);
+
+    STAGES.forEach(function(s){
+      card.appendChild(mk("label", { "class":"fl", "for":s.k+"_"+g.n },
+        s.full + ' <span class="hint">' + s.h + "</span>"));
+      card.appendChild(mk("input", { type:"text", id:s.k+"_"+g.n, placeholder:"On track looks like…" }));
+      card.appendChild(mk("div", { "class":"cnt", id:"warn_"+s.k+"_"+g.n }));
+    });
+
+    card.appendChild(mk("label", { "class":"fl", "for":"gs"+g.n },
+      'First move, and the day you make it <span class="hint">Something you could do in the next two weeks. Name the day.</span>'));
+    card.appendChild(mk("input", { type:"text", id:"gs"+g.n, placeholder:"e.g. Sign up for tutoring — Thursday during advisory" }));
+
+    card.appendChild(mk("label", { "class":"fl", "for":"gi"+g.n },
+      'If–then, decided in advance <span class="hint">"If [that happens], then I will [do this]." Write the whole sentence.</span>'));
+    card.appendChild(mk("input", { type:"text", id:"gi"+g.n, placeholder:"If ______ happens, then I will ______" }));
+    card.appendChild(mk("div", { "class":"cnt", id:"warn_if"+g.n }));
+
+    host.appendChild(card);
+  });
+}
+function drawTimeline(n){
+  var tl = $("tl"+n);
+  if(!tl) return;
+  tl.innerHTML = "";
+  var nodes = [{ mo:"Now", txt:"Today", fill:true }];
+  STAGES.forEach(function(s){
+    var val = v(s.k+"_"+n);
+    nodes.push({ mo:s.mo, txt: val || "—", fill: val.length >= 4 });
+  });
+  nodes.push({ mo:"Jun", txt: v("gt"+n) || "—", goal:true });
+  nodes.forEach(function(nd){
+    var d = mk("div", { "class":"node" + (nd.fill?" fill":"") + (nd.goal?" goal":"") });
+    d.appendChild(mk("div", { "class":"dotm" }, nd.goal ? "★" : (nd.fill ? "✓" : "")));
+    d.appendChild(mk("div", { "class":"mo" }, nd.mo));
+    d.appendChild(mk("div", { "class":"txt" }, esc(nd.txt.length > 58 ? nd.txt.slice(0,58) + "…" : nd.txt)));
+    tl.appendChild(d);
+  });
+}
+function planWarnings(n){
+  STAGES.forEach(function(s){
+    var w = $("warn_"+s.k+"_"+n);
+    if(!w) return;
+    var val = v(s.k+"_"+n), goal = v("gt"+n);
+    if(val && goal && val.toLowerCase() === goal.toLowerCase()){
+      w.className = "cnt"; w.style.color = "var(--amber)";
+      w.textContent = "This is the same sentence as your June outcome. A checkpoint has to be somewhere you could stand before June — what does partway look like?";
+    } else { w.textContent = ""; }
+  });
+  var wi = $("warn_if"+n);
+  var t = v("gi"+n).toLowerCase();
+  if(t && !(t.indexOf("if") > -1 && t.indexOf("then") > -1)){
+    wi.style.color = "var(--amber)";
+    wi.textContent = "An if–then needs both halves. Name the situation, then name what you do about it.";
+  } else { wi.textContent = ""; }
+}
+function syncPlanner(){
+  OUTS.forEach(function(g){
+    var lab = $("plab"+g.n), ec = $("pecho"+g.n);
+    if(lab) lab.textContent = "Outcome " + g.n + " — " + (v("gd"+g.n).split("—")[0].trim() || "");
+    if(ec){
+      var t = v("gt"+g.n);
+      ec.innerHTML = t ? "<strong>June:</strong> " + esc(t) : "<em>Write this outcome in section 3 first.</em>";
+    }
+    drawTimeline(g.n);
+    planWarnings(g.n);
+  });
+}
+function planFilled(n){
+  return STAGES.every(function(s){ return v(s.k+"_"+n).length >= 4; })
+      && v("gs"+n).length >= 6
+      && /if/i.test(v("gi"+n)) && /then/i.test(v("gi"+n));
+}
+var simCleared = false, simStep = 0;
+var SIMQ = [
+  { mo:"NOVEMBER", stamp:"first marking period ends", k:"m1" },
+  { mo:"JANUARY",  stamp:"first semester ends",       k:"m2" },
+  { mo:"APRIL",    stamp:"four weeks of school left", k:"m3" }
+];
+function runSim(){
+  simStep = 0;
+  stepSim();
+}
+function stepSim(){
+  var body = $("simBody");
+  if(simStep >= SIMQ.length){
+    simCleared = true;
+    $("simTitle").textContent = "Simulation complete";
+    $("simStamp").textContent = "back to today";
+    body.innerHTML = "";
+    body.appendChild(mk("div", { "class":"callout green" },
+      "<strong>You just stood at all three checkpoints.</strong> Every one of them is a place you can still change the outcome. The last one where that is cheap is November."));
+    var row = mk("div", { "class":"btnrow" });
+    var again = mk("button", { "class":"btn g", type:"button" }, "Run it again");
+    again.addEventListener("click", runSim);
+    row.appendChild(again);
+    body.appendChild(row);
+    refresh();
+    return;
+  }
+  var s = SIMQ[simStep];
+  $("simTitle").textContent = "It is " + s.mo + ".";
+  $("simStamp").textContent = s.stamp;
+  body.innerHTML = "";
+  body.appendChild(mk("p", { style:"margin:0 0 4px;font-size:14.5px;color:var(--ink-soft)" },
+    "Here is what you said on-track would look like right now:"));
+  OUTS.forEach(function(g){
+    var txt = v(s.k+"_"+g.n) || "(nothing written)";
+    body.appendChild(mk("div", { "class":"quote" }, "Outcome " + g.n + "\n" + esc(txt)));
+  });
+  body.appendChild(mk("p", { "class":"ask" },
+    "Standing here, could someone else look at these three lines and tell whether you are on track?"));
+  var row = mk("div", { "class":"btnrow" });
+  var yes = mk("button", { "class":"btn p", type:"button" }, "Yes — they could tell");
+  var no  = mk("button", { "class":"btn g", type:"button" }, "No — too vague");
+  yes.addEventListener("click", function(){ simStep++; stepSim(); });
+  no.addEventListener("click", function(){
+    if(no.disabled) return;
+    no.disabled = true; yes.disabled = true;
+    body.appendChild(mk("div", { "class":"callout amber" },
+      "<strong>Then it is not a checkpoint yet.</strong> Scroll up and add the part someone could look at — a number, a count, a date, or the name of the thing that would be finished. Then start the simulator over."));
+    var again = mk("div", { "class":"btnrow" });
+    var rb = mk("button", { "class":"btn p", type:"button", id:"simRestart" }, "Start the simulator over");
+    rb.addEventListener("click", runSim);
+    again.appendChild(rb);
+    body.appendChild(again);
+  });
+  row.appendChild(yes); row.appendChild(no);
+  body.appendChild(row);
+}
+function gate4(){
+  var bad = [1,2,3].filter(function(n){ return !planFilled(n); });
+  if(bad.length) return { ok:false, msg:"Plan " + bad.join(", ") + " still needs all three checkpoints, a first move, and a full if–then." };
+  if(!simCleared) return { ok:false, msg:"Run the checkpoint simulator all the way through to finish this section." };
+  return { ok:true, msg:"Three plans built and simulated. Checkmark is up." };
+}
+
+/* ============ 5 · letter, predictions, commitment ============ */
+var PARAS = [
+  { id:"p_1", min:60, t:"1 · Open it — where you are the day you write this",
+    h:"Set the scene. What room, what day, what is going on this week. Give the May version something to land in." },
+  { id:"p_2", min:70, t:"2 · Tell them who you are right now",
+    h:"Pull from your time capsule. Nobody grades honesty, but the May version can tell when you faked it." },
+  { id:"p_3", min:70, t:"3 · Say what you promised yourself",
+    h:"Your three outcomes and the plan behind them, in your own words — not copied from the boxes. Why these three?" },
+  { id:"p_4", min:70, t:"4 · Write the part they will need in February",
+    h:"Midwinter this year gets heavy. What do you want to hear from yourself then? What are they allowed to let go of?" },
+  { id:"p_5", min:50, t:"5 · Close it — the celebration",
+    h:"You made it to the end of twelfth grade. Say the thing you would want someone to say to you that day, then sign off." }
+];
+function buildParas(){
+  var host = $("paras");
+  PARAS.forEach(function(p){
+    host.appendChild(mk("label", { "class":"fl", "for":p.id }, p.t + ' <span class="hint">' + p.h + " (" + p.min + "+ words)</span>"));
+    var ta = mk("textarea", { id:p.id, rows:"5", placeholder:"Write here" });
+    host.appendChild(ta);
+    var c = mk("div", { "class":"cnt", "data-for":p.id });
+    host.appendChild(c);
+    ta.addEventListener("input", function(){
+      var w = words(ta.value);
+      c.className = "cnt" + (w >= p.min ? " ok" : "");
+      c.innerHTML = "<b>"+w+"</b> words" + (w >= p.min ? " · floor cleared" : " · floor is " + p.min);
+      refresh();
+    });
+    c.innerHTML = "<b>0</b> words · floor is " + p.min;
+  });
+}
+var PRED = [
+  { id:"pr1", q:"In May, the thing I am most worried about today will have turned out to be…" },
+  { id:"pr2", q:"By graduation, my next step will be…" },
+  { id:"pr3", q:"The class that will be hardest for me this year is…" },
+  { id:"pr4", q:"Of my three outcomes, the one I will actually land is…" },
+  { id:"pr5", q:"One thing that will surprise me about this year…" }
+];
+function buildPreds(){
+  var host = $("preds");
+  PRED.forEach(function(p){
+    host.appendChild(mk("label", { "class":"fl", "for":p.id }, p.q));
+    var row = mk("div", { "class":"two" });
+    var left = mk("div");
+    left.appendChild(mk("input", { type:"text", id:p.id, placeholder:"Take a swing" }));
+    var right = mk("div");
+    var r = mk("input", { type:"range", id:p.id+"c", min:"5", max:"99", value:"70", step:"1", style:"width:100%" });
+    var lab = mk("div", { "class":"cnt", id:p.id+"v" }, "<b>70</b>% sure");
+    r.addEventListener("input", function(){ lab.innerHTML = "<b>"+r.value+"</b>% sure"; });
+    right.appendChild(r); right.appendChild(lab);
+    row.appendChild(left); row.appendChild(right);
+    host.appendChild(row);
+  });
+}
+function gate5(){
+  var short = PARAS.filter(function(p){ return words(v(p.id)) < p.min; });
+  if(short.length) return { ok:false, msg: short.length + " paragraph" + (short.length===1?"":"s") + " still under the word floor." };
+  var np = PRED.filter(function(p){ return v(p.id).length > 0; }).length;
+  if(np < 4) return { ok:false, msg:"Make at least four predictions (" + np + " so far)." };
+  if(v("commit").length < 8) return { ok:false, msg:"Write your seven-day commitment." };
+  return { ok:true, msg:"Letter, predictions, and commitment done. Checkmark is up." };
+}
+
+/* ============ 6 · exit ticket ============ */
+var QUIZ = [
+  { id:"x1", ord:["a","c","b","d"], q:"Which of these is an outcome rather than a wish?",
+    o:[ {id:"a",t:"Get more serious about school this year."},
+        {id:"b",t:"Three scholarship applications submitted by December 15 — proof is the confirmation emails."},
+        {id:"c",t:"Try to figure out what I want to do after graduation."},
+        {id:"d",t:"Be a better version of myself by June."} ],
+    f:{ a:"Serious how, and by when? Test each option by asking what you would look at in June to settle it.",
+        b:"Amount, deadline, and a document that settles it — all three, which is what separates the two piles.",
+        c:"“Try to figure out” names an effort. Check each option for something a person other than you could confirm.",
+        d:"This one has a deadline, which is why it is tempting. Check it for the other two things an outcome needs." } },
+  { id:"x2", ord:["c","b","a","d"], q:"A student writes “Raise my GPA.” What is the fastest way to make it checkable?",
+    o:[ {id:"a",t:"Say it with more conviction."},
+        {id:"b",t:"Add a number and a date — from 3.1 to 3.4 by the end of the first semester."},
+        {id:"c",t:"Tell more people so they hold you to it."},
+        {id:"d",t:"Break it into smaller wishes."} ],
+    f:{ a:"Conviction is not something a checker can read. Look for the option that changes the sentence itself.",
+        b:"From what, to what, by when. That is the whole move.",
+        c:"Accountability can help you follow through, but ask whether it changes what the sentence says.",
+        d:"Look closely at that wording. If the pieces are still wishes, what has actually improved?" } },
+  { id:"x3", ord:["a","c","d","b"], q:"What is the point of working backwards from June to November?",
+    o:[ {id:"a",t:"It makes the plan look more official."},
+        {id:"b",t:"It sets checkpoints, so you find out you are off track in November instead of May."},
+        {id:"c",t:"It guarantees the outcome happens."},
+        {id:"d",t:"It replaces the need for a deadline."} ],
+    f:{ a:"Appearance is not the point. Ask what backwards planning lets you <em>do</em> that a single June deadline does not.",
+        b:"Three places to notice, and three places you can still act. May is too late to be the first one.",
+        c:"Nothing guarantees an outcome. Ask what a plan can do instead of guarantee.",
+        d:"Look at the worked example again — does the June deadline disappear when you add checkpoints?" } },
+  { id:"x4", ord:["d","b","c","a"], q:"Why write an if–then sentence instead of just deciding to work harder?",
+    o:[ {id:"a",t:"If–then sentences are required for the word count."},
+        {id:"b",t:"Because the decision gets made now, while you are calm — not in the moment you are tired and behind."},
+        {id:"c",t:"Because obstacles usually do not actually happen."},
+        {id:"d",t:"So the teacher knows what excuse you will use."} ],
+    f:{ a:"Nothing in this activity has a word count except the letter. Look at when the decision gets made.",
+        b:"The hard part is handled before the hard day arrives. That is the whole trick.",
+        c:"You named your obstacle because it is likely, not unlikely. Reconsider from there.",
+        d:"Reread the if–then box — it asks what you will do, not why you did not. Which option matches that?" } },
+  { id:"x5", ord:["a","b","c","d"], q:"Why put a confidence percentage on your predictions?",
+    o:[ {id:"a",t:"It makes the predictions more likely to come true."},
+        {id:"b",t:"It shows how optimistic you are."},
+        {id:"c",t:"It lets you check whether the things you are 90% sure about actually happen about 90% of the time."},
+        {id:"d",t:"It is required for the word count."} ],
+    f:{ a:"Writing a number down does not move the world. Ask what the number lets you check later.",
+        b:"Optimism is a mood. Look for the option that describes something you could actually score in May.",
+        c:"That is calibration — and being confidently wrong over and over is the thing worth catching early.",
+        d:"There is no word count here. Ask what you would do with these percentages in May." } },
+  { id:"x6", ord:["c","a","b","d"], q:"A student wants “to be more organized.” Which proof would actually settle it in June?",
+    o:[ {id:"a",t:"Feeling calmer about school than I do now."},
+        {id:"b",t:"My friends saying I seem more together."},
+        {id:"c",t:"Zero missing assignments in the gradebook for both semesters."},
+        {id:"d",t:"Trying a planner for a few weeks."} ],
+    f:{ a:"A feeling is real, but ask whether anyone else could look at it and agree.",
+        b:"Closer, because someone else is involved — but ask whether two people would score it the same way.",
+        c:"A number in a system you both can open. That is what proof means here.",
+        d:"That describes an attempt, not evidence. Look for the option someone could check without asking you." } },
+  { id:"x7", ord:["b","a","c","d"], q:"A student's November checkpoint reads exactly the same as their June outcome. What is the problem?",
+    o:[ {id:"a",t:"Nothing — repeating the goal keeps it front of mind."},
+        {id:"b",t:"It is too ambitious for November, so the goal should be made smaller."},
+        {id:"c",t:"A checkpoint has to describe partway, or there is no way to tell in November whether they are behind."},
+        {id:"d",t:"November is too early to check anything."} ],
+    f:{ a:"Ask what the checkpoint is <em>for</em>. If it cannot be judged in November, what has it added?",
+        b:"The June outcome may be fine as written. Look at what the November line is supposed to describe.",
+        c:"Checkpoints measure partway. If November and June say the same thing, November tells you nothing.",
+        d:"The worked example checks in November on purpose. Ask why that timing was chosen." } },
+  { id:"x8", ord:["a","b","d","c"], q:"Which of these is a real first move?",
+    o:[ {id:"a",t:"Get my grade up in Statistics."},
+        {id:"b",t:"Start caring more about the class."},
+        {id:"c",t:"Email Mr. Ruiz Thursday during advisory to ask when tutoring meets."},
+        {id:"d",t:"Do better on the next three tests."} ],
+    f:{ a:"That is the outcome restated. A first move is something you could finish this week.",
+        b:"Caring is not an action you can schedule. Look for the option with a day attached.",
+        c:"One action, one person, one day. You could do it this week and know it is done.",
+        d:"Three tests is a result over time. Ask which option you could complete in the next two weeks." } }
+];
+var qState = {};
+function buildQuiz(){
+  var host = $("quiz");
+  QUIZ.forEach(function(item, i){
+    var wrap = mk("div", { "class":"q" });
+    wrap.appendChild(mk("p", { "class":"qh" }, '<span class="qn">' + (i+1) + '.</span>' + item.q));
+    var opts = mk("div", { "class":"opts" });
+    ordered(item.o, item.ord).forEach(function(o){
+      var lab = mk("label", { "class":"opt" });
+      var inp = mk("input", { type:"radio", name:item.id, value:o.id });
+      lab.appendChild(inp);
+      lab.appendChild(mk("span", {}, o.t));
+      inp.addEventListener("change", function(){ answerQuiz(item, o.id, opts, lab); });
+      opts.appendChild(lab);
+    });
+    wrap.appendChild(opts);
+    wrap.appendChild(mk("div", { "class":"qfb", id:"qf_"+item.id }));
+    host.appendChild(wrap);
+  });
+}
+function lockQ(opts){
+  opts.querySelectorAll("input").forEach(function(i){ i.disabled = true; });
+  opts.querySelectorAll(".opt").forEach(function(o){ o.classList.add("lock"); });
+}
+function answerQuiz(item, oid, opts, lab){
+  var st = qState[item.id] || { tries:0, done:false, first:false };
+  if(st.done) return;
+  st.tries++;
+  var fb = $("qf_"+item.id);
+  var right = isRight(item.id, oid);
+  if(right){
+    st.done = true;
+    if(st.tries === 1) st.first = true;
+    lab.classList.add("hit");
+    lockQ(opts);
+    fb.className = "qfb good on";
+    fb.innerHTML = "<strong>Correct.</strong> " + item.f[oid];
+  } else if(st.tries >= 2){
+    st.done = true;
+    lab.classList.add("miss");
+    lockQ(opts);
+    fb.className = "qfb out on";
+    fb.innerHTML = "<strong>That was your retry.</strong> " + item.f[oid] +
+      " Bring this one to Mr. Babb — it is worth two minutes of talking through.";
+  } else {
+    lab.classList.add("miss");
+    fb.className = "qfb bad on";
+    fb.innerHTML = "<strong>Not yet — one retry left.</strong> " + item.f[oid];
+  }
+  qState[item.id] = st;
+  var done = QUIZ.filter(function(q){ return qState[q.id] && qState[q.id].done; }).length;
+  $("quizScore").innerHTML = "Answered <b>" + done + "</b> of 8";
+  if(done === QUIZ.length) openNotebook();
+  refresh();
+}
+function firstTryScore(){
+  return QUIZ.filter(function(q){ return qState[q.id] && qState[q.id].first; }).length;
+}
+function gate6(){
+  var done = QUIZ.filter(function(q){ return qState[q.id] && qState[q.id].done; }).length;
+  if(done < QUIZ.length) return { ok:false, msg:(QUIZ.length - done) + " question" + (done === 7 ? "" : "s") + " left on the exit ticket." };
+  return { ok:true, msg:"Exit ticket finished. Copy your document before you close this tab." };
+}
+
+/* ============ document assembly ============ */
+function prettyDate(iso){
+  if(!iso) return "the last week of school";
+  var p = iso.split("-");
+  if(p.length !== 3) return iso;
+  var M = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  return (M[parseInt(p[1],10)-1] || "") + " " + parseInt(p[2],10) + ", " + p[0];
+}
+function today(){
+  var d = new Date();
+  var M = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  return M[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
+}
+var RULE = "------------------------------------------------------------";
+function buildDoc(){
+  var name = v("sName") || "________";
+  var L = [];
+  L.push("LETTER TO MY FUTURE SELF");
+  L.push("College & Career Readiness · Mr. Babb · Activity 1.1.1");
+  L.push("Written by: " + name);
+  L.push("Written on: " + today());
+  L.push("Do not open until: " + prettyDate(v("sDate")));
+  L.push(""); L.push(RULE); L.push("");
+  L.push("THE LETTER"); L.push("");
+  PARAS.forEach(function(p){ var t = v(p.id); if(t){ L.push(t); L.push(""); } });
+  L.push("— " + name);
+  L.push(""); L.push(RULE); L.push("");
+  L.push("TIME CAPSULE — " + today()); L.push("");
+  CARDS.forEach(function(c){ L.push(c.q + ": " + (v(c.id) || "—")); });
+  L.push(""); L.push(RULE); L.push("");
+  L.push("MY YEAR PLAN — THREE OUTCOMES, WORKED BACKWARDS");
+  OUTS.forEach(function(g){
+    var n = g.n;
+    L.push("");
+    L.push("OUTCOME " + n + " — " + (v("gd"+n) || "—"));
+    L.push("  By June:       " + (v("gt"+n) || "—"));
+    L.push("  Proof:         " + (v("ge"+n) || "—"));
+    L.push("  Why this one:  " + (v("gw"+n) || "—"));
+    L.push("  --- working backwards ---");
+    L.push("  By November:   " + (v("m1_"+n) || "—"));
+    L.push("  By January:    " + (v("m2_"+n) || "—"));
+    L.push("  By April:      " + (v("m3_"+n) || "—"));
+    L.push("  First move:    " + (v("gs"+n) || "—"));
+    L.push("  If-then:       " + (v("gi"+n) || "—"));
+    L.push("  Checkpoints:  Nov [ ] on track [ ] behind   Jan [ ] on track [ ] behind   Apr [ ] on track [ ] behind");
+    L.push("  Result in June: [ ] hit   [ ] partly   [ ] missed");
+  });
+  L.push(""); L.push(RULE); L.push("");
+  L.push("PREDICTIONS — score these in May");
+  PRED.forEach(function(p, i){
+    var c = $(p.id+"c") ? $(p.id+"c").value : "70";
+    L.push("");
+    L.push((i+1) + ". " + p.q);
+    L.push("   My call: " + (v(p.id) || "—") + "   (" + c + "% confident)");
+    L.push("   Was I right?  [ ] yes   [ ] no   [ ] partly");
+  });
+  L.push(""); L.push(RULE); L.push("");
+  L.push("WHAT I AM DOING IN THE NEXT SEVEN DAYS");
+  L.push(v("commit") || "—");
+  L.push(""); L.push("Exit ticket, first try: " + firstTryScore() + " of 8");
+  L.push(""); L.push(RULE); L.push("");
+  L.push("FOR THE MAY VERSION OF ME:");
+  L.push("Read the whole thing before you score anything. Then answer one question in");
+  L.push("writing: what did the August version of me get wrong about this year, and");
+  L.push("what did I get right?");
+  return L.join("\n");
+}
+function openNotebook(){
+  var nb = $("notebook");
+  nb.classList.add("on");
+  $("nbScore").textContent = firstTryScore();
+  var outs = [1,2,3].map(function(n){ return v("gt"+n); }).filter(Boolean);
+  $("nbOut").textContent = outs.length ? outs.join("  ·  ") : "—";
+  $("nbMove").textContent = v("gs1") || "—";
+  $("nbNext").textContent = v("m1_1") ? "November — " + v("m1_1") : "—";
+  $("doc").textContent = buildDoc();
+}
+
+/* ============ copy / print ============ */
+function flash(id){
+  var f = $(id);
+  if(!f) return;
+  f.classList.add("on");
+  setTimeout(function(){ f.classList.remove("on"); }, 2000);
+}
+function copyDoc(){
+  var txt = buildDoc();
+  $("doc").textContent = txt;
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(function(){ flash("copyFlash"); }, function(){ fallback(txt); });
+  } else fallback(txt);
+}
+function fallback(txt){
+  var ta = document.createElement("textarea");
+  ta.value = txt; ta.setAttribute("readonly","readonly");
+  ta.style.position = "fixed"; ta.style.top = "-1000px";
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand("copy"); flash("copyFlash"); }
+  catch(e){
+    var r = document.createRange();
+    r.selectNodeContents($("doc"));
+    var sel = window.getSelection();
+    sel.removeAllRanges(); sel.addRange(r);
+    alert("Automatic copy is blocked here. Your document is selected — press Ctrl+C (or Cmd+C) to copy it.");
+  }
+  document.body.removeChild(ta);
+}
+
+/* ============ init ============ */
+buildPills();
+buildQC();
+buildDeck();
+buildSorter();
+buildOutcomes();
+buildPlanner();
+buildParas();
+buildPreds();
+buildQuiz();
+
+$("checkAllBtn").addEventListener("click", function(){
+  [1,2,3].forEach(function(n){ checkOutcome(n, true); });
+  flash("checkFlash");
+  refresh();
+});
+$("simRun").addEventListener("click", runSim);
+$("copyBtn").addEventListener("click", copyDoc);
+$("printBtn").addEventListener("click", function(){ $("doc").textContent = buildDoc(); setTimeout(function(){ window.print(); }, 60); });
+
+document.addEventListener("input", function(e){
+  var id = e.target && e.target.id;
+  if(id && (/^gt[123]$/.test(id) || /^gd[123]$/.test(id) || /^m[123]_[123]$/.test(id) || /^gi[123]$/.test(id))) syncPlanner();
+  if(id && /^g[tew][123]$/.test(id)) [1,2,3].forEach(function(n){ checkOutcome(n, false); });
+  refresh();
+});
+document.addEventListener("change", function(){ syncPlanner(); refresh(); });
+
+syncPlanner();
+[1,2,3].forEach(function(n){ checkOutcome(n, false); });
+refresh();
+
+})();
+</script>
+</body>
+</html>
