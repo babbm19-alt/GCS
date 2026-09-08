@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mr. Babb — Class Activities</title>
+<style>
+:root{
+  --navy:#1b2a4a; --purple:#6b3fa0; --lilac:#f2ecf8; --green:#1a7f4e;
+  --red:#c0392b; --amber:#b7791f; --bg:#f7f6fa; --card:#fff;
+  --ink:#1b2a4a; --ink-soft:#55607a; --ink-faint:#7d879c; --line:#dfd9ea;
+  --r:14px; --shadow:0 1px 2px rgba(27,42,74,.06), 0 6px 20px rgba(27,42,74,.07);
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);
+  font:16px/1.6 "Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;}
+code{font-family:Consolas,"Courier New",monospace}
+.wrap{max-width:960px;margin:0 auto;padding:0 18px}
+
+header.hero{background:linear-gradient(135deg,#1b2a4a 0%,#3a2f68 52%,#6b3fa0 100%);color:#fff;padding:34px 0 30px}
+.teacher{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#cbbde4;margin:0 0 8px}
+header.hero h1{margin:0 0 8px;font-size:clamp(26px,5vw,36px);line-height:1.15}
+header.hero p{margin:0;color:#ded5ee;max-width:60ch;font-size:15.5px}
+
+h2.sec{font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);
+  margin:36px 0 14px;font-weight:700}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.item{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:20px 22px;box-shadow:var(--shadow);display:flex;flex-direction:column}
+.code{font-family:Consolas,"Courier New",monospace;font-size:12.5px;font-weight:700;
+  color:var(--purple);background:var(--lilac);border-radius:6px;padding:2px 8px;align-self:flex-start}
+.item h3{margin:11px 0 6px;font-size:18px}
+.item p{margin:0 0 14px;color:var(--ink-soft);font-size:14.5px;flex:1}
+.meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.tag{font-size:12px;font-weight:600;color:var(--ink-soft);background:#f1eff7;
+  border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.open{display:inline-flex;align-items:center;gap:7px;align-self:flex-start;
+  background:var(--purple);color:#fff;text-decoration:none;font-weight:600;font-size:14.5px;
+  border-radius:10px;padding:9px 16px}
+.open:hover{background:#5a3489}
+.open:focus-visible{outline:3px solid var(--navy);outline-offset:2px}
+
+.note{border-left:4px solid var(--purple);background:var(--lilac);border-radius:0 10px 10px 0;
+  padding:14px 17px;margin:26px 0;font-size:14.5px;color:#3b2d55}
+.note strong{color:var(--purple)}
+.note.amber{border-left-color:var(--amber);background:#fdf5e4;color:#5c4410}
+.note.amber strong{color:var(--amber)}
+.note ul{margin:8px 0 0;padding-left:20px}
+.note li{margin:4px 0}
+
+footer{text-align:center;color:var(--ink-faint);font-size:12.8px;
+  padding:30px 18px 44px;border-top:1px solid var(--line);margin-top:44px}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="teacher">Mr. Babb &middot; PI Tech Network</p>
+    <h1>Class Activities</h1>
+    <p>Interactive lessons for College &amp; Career Readiness. Open one on any device &mdash; nothing to install, nothing to sign into.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <h2 class="sec">College &amp; Career Readiness</h2>
+  <div class="grid">
+
+    <div class="item">
+      <span class="code">CCR 1.1.1</span>
+      <h3>Letter to Your Future Self</h3>
+      <p>Name three outcomes you want out of senior year, work each one backwards into checkpoints you can actually hit, and seal it inside a letter you open in May.</p>
+      <div class="meta">
+        <span class="tag">90-minute block</span>
+        <span class="tag">Grade 12</span>
+        <span class="tag">6 sections</span>
+      </div>
+      <a class="open" href="ccr-111-letter-to-future-self.html">Open activity &rarr;</a>
+    </div>
+
+    <div class="item">
+      <span class="code">CCR 1.1.2</span>
+      <h3>Values, Identity &amp; Fit</h3>
+      <p>Forty values, cut to ten, then cut to three &mdash; one pair at a time. Then four real doors out of this building &mdash; college, community college, a paid apprenticeship, the military &mdash; and a short list you build against your own three values.</p>
+      <div class="meta">
+        <span class="tag">85&ndash;90 minute block</span>
+        <span class="tag">Grade 12</span>
+        <span class="tag">7 sections + extra</span>
+      </div>
+      <a class="open" href="ccr-112-values-and-college-fit.html">Open activity &rarr;</a>
+    </div>
+
+  </div>
+
+  <div class="note amber">
+    <strong>Before you start &mdash; read this once.</strong> These activities do not save your work.
+    If you close the tab or refresh the page, everything you typed is gone. Finish in one sitting,
+    and copy your work out at the last section before you leave.
+  </div>
+
+  <div class="note">
+    <strong>How these work.</strong>
+    <ul>
+      <li>Each activity is one page with a row of sections across the top.</li>
+      <li>A section earns a green checkmark when the work in it is actually finished &mdash; not when you click Next.</li>
+      <li>Nothing you type is sent anywhere. It stays in your browser.</li>
+      <li>They work offline, on a Chromebook, and on a phone.</li>
+    </ul>
+  </div>
+
+</div>
+
+<footer>Mr. Babb &middot; PI Tech Network &middot; Hosted on GitHub Pages</footer>
+
+</body>
+</html>
