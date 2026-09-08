@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CCR 1.1.2 — Values, Identity &amp; Fit</title>
+<style>
+:root{
+  --navy:#1b2a4a; --purple:#6b3fa0; --lilac:#f2ecf8; --green:#1a7f4e;
+  --red:#c0392b; --amber:#b7791f; --bg:#f7f6fa; --card:#fff;
+  --ink:#1b2a4a; --ink-soft:#55607a; --ink-faint:#7d879c;
+  --line:#dfd9ea; --line-soft:#eeeaf5; --r:14px;
+  --shadow:0 1px 2px rgba(27,42,74,.06), 0 6px 20px rgba(27,42,74,.07);
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);
+  font:16px/1.6 "Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+  -webkit-text-size-adjust:100%}
+code,.mono{font-family:Consolas,"Courier New",monospace}
+.wrap{max-width:980px;margin:0 auto;padding:0 18px}
+
+header.hero{background:linear-gradient(135deg,#1b2a4a 0%,#3a2f68 52%,#6b3fa0 100%);color:#fff;padding:26px 0 22px}
+.teacher{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#cbbde4;margin:0 0 8px}
+header.hero h1{margin:0 0 6px;font-size:clamp(23px,4.4vw,34px);line-height:1.14}
+header.hero .sub{margin:0 0 16px;color:#ded5ee;max-width:64ch;font-size:15.5px}
+.metarow{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.22);border-radius:999px;
+  padding:4px 12px;font-size:12.5px;font-weight:600;color:#f0eaf9}
+
+nav.pills{position:sticky;top:0;z-index:60;background:var(--card);border-bottom:1px solid var(--line);
+  box-shadow:0 2px 10px rgba(27,42,74,.06)}
+nav.pills .inner{max-width:980px;margin:0 auto;padding:10px 12px;display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+nav.pills button{flex:0 0 auto;font:inherit;font-size:13.5px;font-weight:600;cursor:pointer;
+  border:1.5px solid var(--line);background:var(--card);color:var(--ink-soft);
+  border-radius:999px;padding:7px 14px 7px 10px;display:flex;align-items:center;gap:8px;white-space:nowrap;
+  transition:border-color .15s,color .15s,background .15s}
+nav.pills button:hover{border-color:var(--purple);color:var(--purple)}
+nav.pills button.extra{border-style:dashed;color:var(--ink-soft)}
+nav.pills button.extra .dot{background:#fdf5e4;color:var(--amber)}
+nav.pills button[aria-current="true"]{background:var(--purple);border-color:var(--purple);color:#fff}
+nav.pills .dot{width:21px;height:21px;border-radius:50%;flex:0 0 auto;display:inline-flex;align-items:center;
+  justify-content:center;background:var(--line-soft);color:var(--ink-faint);font-size:11.5px;font-weight:800}
+nav.pills button[aria-current="true"] .dot{background:rgba(255,255,255,.25);color:#fff}
+nav.pills button.done .dot{background:var(--green);color:#fff}
+nav.pills button.done .dot .n{display:none}
+nav.pills button.done .dot::after{content:"\2713"}
+
+section.pane{display:none}
+section.pane.on{display:block}
+h2.ptitle{margin:24px 0 2px;font-size:23px;line-height:1.2;display:flex;align-items:baseline;gap:11px;flex-wrap:wrap}
+.vhead .mins{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--amber);
+  background:#fdf5e4;border:1px solid #f0dfba;padding:2px 8px;border-radius:999px}
+h2.ptitle .mins{font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--amber);
+  background:#fdf5e4;border:1px solid #f0dfba;padding:2px 9px;border-radius:999px}
+p.lede{color:var(--ink-soft);margin:6px 0 0;max-width:72ch}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px 24px;
+  box-shadow:var(--shadow);margin:18px 0}
+.card.sm{padding:16px 18px}
+h3{margin:0 0 10px;font-size:17px}
+h4{margin:18px 0 8px;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint)}
+.callout{border-left:4px solid var(--purple);background:var(--lilac);border-radius:0 10px 10px 0;
+  padding:13px 16px;margin:14px 0;font-size:14.5px;color:#3b2d55}
+.callout b,.callout strong{color:var(--purple)}
+.callout.amber{border-left-color:var(--amber);background:#fdf5e4;color:#5c4410}
+.callout.amber strong{color:var(--amber)}
+.callout.green{border-left-color:var(--green);background:#e8f6ee;color:#14532d}
+.callout.green strong{color:var(--green)}
+
+label.fl{display:block;font-weight:600;font-size:14.5px;margin:14px 0 5px}
+label.fl .hint{display:block;font-weight:400;color:var(--ink-faint);font-size:12.8px;margin-top:2px}
+input[type=text],textarea{width:100%;font:inherit;color:var(--ink);background:#fcfbfe;
+  border:1.5px solid var(--line);border-radius:10px;padding:9px 12px}
+textarea{min-height:64px;resize:vertical;line-height:1.55}
+input:focus,textarea:focus{outline:none;border-color:var(--purple);box-shadow:0 0 0 3px rgba(107,63,160,.15);background:#fff}
+.cnt{font-size:12.4px;color:var(--ink-faint);margin-top:4px}
+.cnt.ok{color:var(--green);font-weight:600}
+
+.btn{font:inherit;font-weight:600;font-size:14.5px;border-radius:10px;padding:9px 17px;cursor:pointer;
+  border:1.5px solid transparent;display:inline-flex;align-items:center;gap:7px}
+.btn.p{background:var(--purple);color:#fff}
+.btn.p:hover{background:#5a3489}
+.btn.g{background:#fff;border-color:var(--line);color:var(--ink)}
+.btn.g:hover{border-color:var(--purple);color:var(--purple)}
+.btn.sm{padding:6px 12px;font-size:13px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btnrow{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px;align-items:center}
+.navrow{display:flex;justify-content:space-between;gap:10px;margin:22px 0 46px}
+:focus-visible{outline:3px solid var(--purple);outline-offset:2px}
+
+.gate{display:flex;align-items:flex-start;gap:10px;font-size:14px;font-weight:600;border-radius:12px;
+  padding:11px 15px;margin-top:16px}
+.gate.no{background:#fdf5e4;border:1px solid #f0dfba;color:#5c4410}
+.gate.yes{background:#e8f6ee;border:1px solid #b6e2c8;color:#14532d}
+.gate .ic{font-size:15px;line-height:1.4}
+
+/* value chips */
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(196px,1fr));gap:10px;margin-top:6px}
+.vchip{border:1.5px solid var(--line);border-radius:12px;background:var(--card);padding:11px 13px;
+  cursor:pointer;text-align:left;font:inherit;position:relative;transition:border-color .12s,background .12s}
+.vchip:hover{border-color:var(--purple)}
+.vchip .vn{font-weight:700;font-size:14.5px;display:block}
+.vchip .vd{font-size:12.6px;color:var(--ink-faint);display:block;margin-top:3px;line-height:1.4}
+.vchip.pick{border-color:var(--green);background:#f2fbf6}
+.vchip.pick::after{content:"\2713";position:absolute;top:8px;right:10px;color:var(--green);font-weight:800;font-size:13px}
+.vchip.off{opacity:.42}
+.counter{font-size:15px;font-weight:700;color:var(--ink-soft);margin:14px 0 0}
+.counter b{color:var(--purple);font-variant-numeric:tabular-nums;font-size:18px}
+
+/* head-to-head */
+.vs{display:grid;grid-template-columns:1fr 62px 1fr;gap:12px;align-items:stretch;margin:16px 0}
+@media(max-width:640px){.vs{grid-template-columns:1fr;gap:8px}}
+.vsbtn{border:2px solid var(--line);border-radius:var(--r);background:var(--card);padding:20px 18px;
+  cursor:pointer;font:inherit;text-align:left}
+.vsbtn:hover{border-color:var(--purple);background:var(--lilac)}
+.vsbtn .vn{font-weight:700;font-size:18px;display:block}
+.vsbtn .vd{font-size:13px;color:var(--ink-faint);display:block;margin-top:5px;line-height:1.45}
+.vsmid{display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--ink-faint);font-size:13px}
+.prog{height:8px;background:var(--line-soft);border-radius:99px;overflow:hidden;margin-top:14px}
+.prog i{display:block;height:100%;background:var(--purple);width:0;transition:width .2s}
+.ranklist{counter-reset:r;margin:0;padding:0;list-style:none}
+.ranklist li{counter-increment:r;display:flex;gap:11px;align-items:baseline;padding:9px 0;
+  border-bottom:1px solid var(--line-soft);font-size:15px}
+.ranklist li:last-child{border-bottom:0}
+.ranklist li::before{content:counter(r);flex:0 0 auto;width:24px;height:24px;border-radius:50%;
+  background:var(--line-soft);color:var(--ink-faint);font-size:12px;font-weight:800;
+  display:flex;align-items:center;justify-content:center}
+.ranklist li.top3::before{background:var(--purple);color:#fff}
+.ranklist li.top3{font-weight:700}
+
+/* value → life */
+.vbox{border:1.5px solid var(--line);border-radius:var(--r);padding:16px 18px;margin:14px 0;background:#fdfcff}
+.vhead{display:flex;align-items:center;gap:9px;margin-bottom:2px}
+.vhead .num{width:25px;height:25px;border-radius:8px;background:var(--purple);color:#fff;display:inline-flex;
+  align-items:center;justify-content:center;font-size:13px;font-weight:700;flex:0 0 auto}
+.vhead .lab{font-weight:700;font-size:16px}
+.reveal{margin-top:10px}
+.reveal .rbtn{font:inherit;font-size:13px;font-weight:600;color:var(--purple);background:none;border:0;
+  cursor:pointer;padding:0;text-decoration:underline}
+.reveal .rbody{display:none;margin-top:8px;font-size:13.6px;color:var(--ink-soft);background:var(--lilac);
+  border-radius:10px;padding:10px 13px}
+.reveal.open .rbody{display:block}
+
+/* scenarios */
+.scn{border:2px solid var(--navy);border-radius:var(--r);overflow:hidden;margin:16px 0}
+.scn .bar{background:var(--navy);color:#fff;padding:9px 15px;font-size:13px;font-weight:700;
+  display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.scn .bar .stamp{font-family:Consolas,"Courier New",monospace;font-size:12.5px;color:#a9b8d6}
+.scn .body{padding:16px 18px;background:#fbfaff}
+.opts2{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:12px}
+@media(max-width:640px){.opts2{grid-template-columns:1fr}}
+.obtn{border:1.5px solid var(--line);border-radius:12px;background:#fff;padding:14px 15px;cursor:pointer;
+  font:inherit;text-align:left;font-size:14.5px;line-height:1.45}
+.obtn:hover{border-color:var(--purple);background:var(--lilac)}
+.obtn.chosen{border-color:var(--purple);background:var(--lilac);font-weight:600}
+.result{margin-top:12px;font-size:14px;border-radius:10px;padding:11px 14px;display:none}
+.result.on{display:block}
+.result.hit{background:#e8f6ee;border:1px solid #b6e2c8;color:#14532d}
+.result.mixed{background:#fdf5e4;border:1px solid #f0dfba;color:#5c4410}
+.tagrow{margin-top:7px;display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:11.5px;font-weight:700;border-radius:6px;padding:2px 8px}
+.tag.up{background:#e8f6ee;color:var(--green)}
+.tag.down{background:#fdeeeb;color:var(--red)}
+
+/* quiz */
+.q{border-top:1px solid var(--line-soft);padding-top:16px;margin-top:16px}
+.q:first-child{border-top:0;padding-top:0;margin-top:0}
+.qh{font-weight:600;font-size:15.5px;margin:0 0 9px}
+.qh .qn{color:var(--purple);font-weight:800;margin-right:6px}
+.opts{display:flex;flex-direction:column;gap:7px}
+.opt{display:flex;gap:9px;align-items:flex-start;border:1.5px solid var(--line);border-radius:10px;
+  padding:10px 13px;cursor:pointer;font-size:14.6px;background:#fcfbfe}
+.opt:hover{border-color:var(--purple);background:var(--lilac)}
+.opt input{margin-top:4px;flex:0 0 auto}
+.opt.hit{border-color:var(--green);background:#e8f6ee}
+.opt.miss{border-color:var(--red);background:#fdeeeb}
+.opt.lock{cursor:default;opacity:.72}
+.qfb{font-size:14px;margin-top:9px;border-radius:9px;padding:10px 13px;display:none}
+.qfb.on{display:block}
+.qfb.good{background:#e8f6ee;border:1px solid #b6e2c8;color:#14532d}
+.qfb.bad{background:#fdf5e4;border:1px solid #f0dfba;color:#5c4410}
+.qfb.out{background:#fdeeeb;border:1px solid #f2c4bc;color:#8c2a1e}
+.score{font-size:14px;font-weight:700;color:var(--ink-soft);margin-top:12px}
+.score b{color:var(--purple);font-variant-numeric:tabular-nums}
+
+/* notebook */
+.nb{border:2px solid var(--purple);border-radius:var(--r);overflow:hidden;margin-top:22px;display:none}
+.nb.on{display:block}
+.nb .nbh{background:var(--purple);color:#fff;padding:13px 18px}
+.nb .nbh h3{margin:0;font-size:17px;color:#fff}
+.nb .nbh p{margin:3px 0 0;font-size:13px;color:#e5d9f5}
+.nb .nbb{padding:18px 20px;background:var(--lilac)}
+.nb .row{display:flex;gap:12px;align-items:baseline;padding:8px 0;border-bottom:1px solid #e2d6f0;font-size:14.4px}
+.nb .row:last-of-type{border-bottom:0}
+.nb .row .k{font-weight:700;color:var(--purple);min-width:120px;flex:0 0 auto}
+.scoreBig{font-size:30px;font-weight:800;color:var(--purple);font-variant-numeric:tabular-nums}
+#doc{white-space:pre-wrap;font-family:Consolas,"Courier New",monospace;font-size:12.8px;line-height:1.65;
+  background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 18px;max-height:420px;
+  overflow:auto;color:#33405e;margin-top:12px}
+.flash{font-size:13.4px;font-weight:700;color:var(--green);opacity:0;transition:opacity .2s}
+.flash.on{opacity:1}
+footer.foot{text-align:center;color:var(--ink-faint);font-size:12.8px;padding:26px 18px 40px;border-top:1px solid var(--line)}
+
+/* ---- four doors ---- */
+.door{border:2px solid var(--line);border-radius:var(--r);overflow:hidden;margin:16px 0;background:var(--card)}
+.door > .dh{display:flex;align-items:center;gap:12px;padding:14px 18px;color:#fff;flex-wrap:wrap}
+.door .dn{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;opacity:.82}
+.door .dt{font-size:19px;font-weight:700;margin-right:auto}
+.door .dtag{font-size:11.5px;font-weight:700;background:rgba(255,255,255,.2);border-radius:999px;padding:3px 10px}
+.door.d1 > .dh{background:var(--navy)}
+.door.d2 > .dh{background:var(--green)}
+.door.d3 > .dh{background:var(--amber)}
+.door.d4 > .dh{background:var(--purple)}
+.door .db{padding:16px 18px}
+.dfacts{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin:0 0 12px}
+.dfact{background:#fbfaff;border:1px solid var(--line-soft);border-radius:10px;padding:10px 12px}
+.dfact .fl2{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);display:block;margin-bottom:3px}
+.dfact .fv{font-size:14px;line-height:1.45}
+.dreal{border-left:4px solid var(--amber);background:#fdf5e4;border-radius:0 10px 10px 0;padding:11px 14px;font-size:14px;color:#5c4410;margin-bottom:12px}
+.dreal strong{color:var(--amber)}
+.dverdict{border-top:1px dashed var(--line);padding-top:13px}
+.vopts{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 10px}
+.vopt{font:inherit;font-size:13.5px;font-weight:600;border:1.5px solid var(--line);background:#fff;border-radius:999px;
+  padding:7px 14px;cursor:pointer;color:var(--ink-soft)}
+.vopt:hover{border-color:var(--purple);color:var(--purple)}
+.vopt.on{background:var(--purple);border-color:var(--purple);color:#fff}
+
+/* ---- short list ---- */
+.filters{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}
+.filters button{font:inherit;font-size:12.5px;font-weight:600;border:1.5px solid var(--line);background:#fff;
+  border-radius:999px;padding:5px 12px;cursor:pointer;color:var(--ink-soft)}
+.filters button.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:10px}
+.cat{border:1.5px solid var(--line);border-radius:12px;background:var(--card);padding:11px 13px;text-align:left;
+  cursor:pointer;font:inherit;display:flex;flex-direction:column;gap:4px}
+.cat:hover{border-color:var(--purple);background:var(--lilac)}
+.cat.on{border-color:var(--green);background:#e8f6ee}
+.cat .cn{font-weight:700;font-size:14.5px;line-height:1.3}
+.cat .cd{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+.cat .cw{font-size:12.6px;color:var(--ink-soft);line-height:1.4}
+.cat .cx{font-size:12.4px;font-weight:600;color:var(--red)}
+.cd.k1{color:var(--navy)}.cd.k2{color:var(--green)}.cd.k3{color:var(--amber)}.cd.k4{color:var(--purple)}
+.addown{margin-top:16px;border-top:1px dashed var(--line);padding-top:14px}
+.addrow{display:flex;gap:8px;flex-wrap:wrap}
+.addrow input{flex:1 1 220px;min-width:0}
+.addrow select{flex:0 1 190px}
+.sl{border:1.5px solid var(--line);border-radius:12px;padding:11px 13px;margin:9px 0;background:#fdfcff}
+.slh{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:7px}
+.slh .sn{font-weight:700;font-size:15px;margin-right:auto}
+.star{font:inherit;font-size:17px;line-height:1;border:1.5px solid var(--line);background:#fff;border-radius:8px;
+  padding:3px 8px;cursor:pointer;color:var(--line)}
+.star.on{background:#fdf5e4;border-color:var(--amber);color:var(--amber)}
+.rm{font:inherit;font-size:12.5px;font-weight:600;border:1.5px solid var(--line);background:#fff;border-radius:8px;
+  padding:4px 10px;cursor:pointer;color:var(--ink-faint)}
+.rm:hover{border-color:var(--red);color:var(--red)}
+.vtags{display:flex;gap:6px;flex-wrap:wrap}
+.vtag{font:inherit;font-size:12.5px;font-weight:600;border:1.5px solid var(--line);background:#fff;border-radius:999px;
+  padding:4px 11px;cursor:pointer;color:var(--ink-soft)}
+.vtag.on{background:var(--green);border-color:var(--green);color:#fff}
+.slempty{color:var(--ink-faint);font-size:14px;font-style:italic;padding:8px 0}
+
+@media print{
+  header.hero,nav.pills,.navrow,.btnrow,.gate,footer.foot,.no-print{display:none!important}
+  section.pane{display:none!important} section.pane#p6{display:block!important}
+  .card,.nb{border:0;box-shadow:none;padding:0}
+  #doc{border:0;max-height:none;overflow:visible;font-size:10.5pt}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="teacher">College Readiness &middot; Unit 1, Activity 1.1.2</p>
+    <h1>Values, Identity &amp; Fit</h1>
+    <p class="sub">Forty values. You keep ten. Then you cut to three &mdash; and those three become the test you run on every school, every program, every apprenticeship, every branch, and every friendship.</p>
+    <div class="metarow">
+      <span class="chip">85&ndash;90 minute block</span>
+      <span class="chip">7 sections + extra</span>
+      <span class="chip">Grade 12</span>
+      <span class="chip">Nothing saves &mdash; copy before you close</span>
+    </div>
+  </div>
+</header>
+
+<nav class="pills" aria-label="Lesson sections"><div class="inner" id="pillbar"></div></nav>
+
+<div class="wrap">
+
+<!-- 1 -->
+<section class="pane on" id="p1">
+  <h2 class="ptitle">Why values, not preferences <span class="mins">6 min</span></h2>
+  <p class="lede">Read this first. It is short, and it changes what the rest of today means.</p>
+  <div class="card">
+    <h3>Everybody picks a school for a reason. Most reasons are borrowed.</h3>
+    <p>Ask a senior why a school is on their list and you will hear one of four answers: it is close, it is cheap, somebody I know goes there, or people have heard of it. Those are real considerations. None of them is a <strong>value</strong>.</p>
+    <p>A <strong>preference</strong> is what you would like. A <strong>value</strong> is what you would give something up for. That difference is the whole lesson. Preferences change with the weather. Values are still true when the choice gets expensive.</p>
+    <p>You are about to build a list of schools. Built on preferences, it reshuffles every time you learn something new. Built on three values you actually named, it becomes a test you can run &mdash; on a school, a program, a job, and on the people you spend Friday night with.</p>
+    <div class="callout"><strong>The move today.</strong> Forty values &rarr; keep ten &rarr; cut to three. The cutting is the point. Anyone can say ten things matter. Naming three means saying out loud what you will trade away.</div>
+    <h4>Quick check</h4>
+    <div id="qc1"></div>
+    <div class="gate no" id="g1"><span class="ic">&#9679;</span><span></span></div>
+    <div class="navrow"><span></span><button class="btn p" data-go="2">Start the sort &rarr;</button></div>
+  </div>
+</section>
+
+<!-- 2 -->
+<section class="pane" id="p2">
+  <h2 class="ptitle">Keep ten <span class="mins">8 min</span></h2>
+  <p class="lede">Forty values below. Tap the ones that are true about you &mdash; not the ones that sound good, and not the ones you think a college wants to see. Stop at ten.</p>
+  <div class="card">
+    <div class="callout amber"><strong>Two rules.</strong> Go fast &mdash; your gut is more honest than your second thoughts. And do not pick a value just because it would look good in an essay or an interview. Nobody reads this but you.</div>
+    <div class="counter" id="vcount">Chosen: <b>0</b> of 10</div>
+    <div class="vgrid" id="vgrid"></div>
+    <div class="btnrow no-print"><button class="btn g sm" id="clearPicks">Clear all</button></div>
+    <div class="gate no" id="g2"><span class="ic">&#9679;</span><span></span></div>
+    <div class="navrow">
+      <button class="btn g" data-go="1">&larr; Back</button>
+      <button class="btn p" data-go="3">Next: cut to three &rarr;</button>
+    </div>
+  </div>
+</section>
+
+<!-- 3 -->
+<section class="pane" id="p3">
+  <h2 class="ptitle">Cut to three <span class="mins">12 min</span></h2>
+  <p class="lede">Ten at a time is impossible to rank. Two at a time takes a second. The page shows you your own values in pairs &mdash; pick the one you would keep if you could only keep one. About twenty-five quick choices.</p>
+  <div class="card" id="sortCard">
+    <div id="sortArea"></div>
+    <div class="prog" id="sortProg"><i></i></div>
+    <p class="lede" id="sortNote" style="font-size:13.5px;margin-top:10px"></p>
+  </div>
+  <div class="card" id="rankCard" style="display:none">
+    <h3>Your ranking</h3>
+    <p class="lede" style="margin-bottom:10px">This came from your own choices, one pair at a time.</p>
+    <ol class="ranklist" id="ranklist"></ol>
+    <div class="callout"><strong>The sort is a mirror, not a verdict.</strong> If the top three do not feel like you, that is worth knowing &mdash; it usually means one pair was a coin flip. You can run it again, or you can override it below. Both are legitimate.</div>
+    <label class="fl" for="confirm3">Type your final top three, in order, separated by commas.
+      <span class="hint">Copy the sort's top three, or change them. Your call &mdash; but you have to commit.</span></label>
+    <input type="text" id="confirm3" placeholder="e.g. Loyalty, Growth, Independence">
+    <div class="cnt" id="confirmNote"></div>
+    <div class="btnrow no-print"><button class="btn g sm" id="useSort">Use the sort's top three</button><button class="btn g sm" id="redoSort">Run the sort again</button></div>
+    <div class="gate no" id="g3"><span class="ic">&#9679;</span><span></span></div>
+    <div class="navrow">
+      <button class="btn g" data-go="2">&larr; Back</button>
+      <button class="btn p" data-go="4">Next: make it real &rarr;</button>
+    </div>
+  </div>
+</section>
+
+<!-- 4 -->
+<section class="pane" id="p4">
+  <h2 class="ptitle">Make it real <span class="mins">10 min</span></h2>
+  <p class="lede">A value you cannot describe in a real situation is still just a word. For each of your three, finish two sentences &mdash; one about where you go next, one about the people around you.</p>
+  <div class="card sm">
+    <p style="margin:0;font-size:14.4px;color:var(--ink-soft)"><strong style="color:var(--purple)">Worked example &mdash; Independence.</strong>
+    Where I go next this looks like: <em>a place I can get to without asking anyone for a ride, and a program I can change my mind inside of without starting over.</em>
+    With friends this looks like: <em>people who do not take it personally when I need a weekend to myself.</em></p>
+  </div>
+  <div id="lifeHost"></div>
+  <div class="card">
+    <div class="callout green"><strong>Why the friendship half is here.</strong> The same test works on people. If your top value is Loyalty and your friend group treats plans as optional, that is not a personality clash &mdash; it is a values mismatch, and naming it is the first honest thing you can do about it.</div>
+    <div class="callout amber"><strong>Keep these.</strong> These six sentences are what you will score every option against in the next two sections, and they become the fit columns on your options spreadsheet.</div>
+    <div class="gate no" id="g4"><span class="ic">&#9679;</span><span></span></div>
+    <div class="navrow">
+      <button class="btn g" data-go="3">&larr; Back</button>
+      <button class="btn p" data-go="5">Next: four doors &rarr;</button>
+    </div>
+  </div>
+</section>
+
+<!-- 5 -->
+<section class="pane" id="p5">
+  <h2 class="ptitle">Extra &mdash; test it against real choices <span class="mins">optional</span></h2>
+  <p class="lede"><strong>This is not required today.</strong> If you finished early, or if Mr. Babb picks this up next class, work through it. Five situations, no right answer &mdash; but every choice serves some values and trades away others. After each one, the page tells you which of <em>your</em> three you just honored and which you just spent.</p>
+  <div id="scnHost"></div>
+  <div class="card">
+    <div id="consistency" class="callout" style="display:none"></div>
+    <div class="gate no" id="g5"><span class="ic">&#9679;</span><span></span></div>
+    <div class="navrow">
+      <button class="btn g" data-go="7">&larr; Back to the exit ticket</button>
+      <span></span>
+    </div>
+  </div>
+</section>
+
+
+<!-- 7 · four doors -->
+<section class="pane" id="p7">
+  <h2 class="ptitle">Four doors <span class="mins">12 min</span></h2>
+  <p class="lede">Four ways out of this building, all of them real. Read all four &mdash; including the ones you already decided are not you. Then say, in your own words, what each one would have to look like to be worth your time.</p>
+
+  <div class="callout green" style="margin-bottom:16px"><strong>Nobody in this room is being sorted.</strong>
+  This page does not pick a door for you and neither does anyone else. You are being asked to look through all four with your eyes open, because the only bad choice on this page is the one you made without knowing what was behind the other three.</div>
+
+  <div id="doorHost"></div>
+
+  <div class="card">
+    <div class="callout amber"><strong>Every number on this page was checked against an official website in September 2026</strong>, and the sources are listed on the spreadsheet. Programs change and some of those official sites are themselves out of date. Before a number goes into a decision, verify it. That is not busywork &mdash; that is the skill.</div>
+    <div class="gate no" id="g7"><span class="ic">&#9679;</span><span></span></div>
+    <div class="navrow">
+      <button class="btn g" data-go="4">&larr; Back</button>
+      <button class="btn p" data-go="6">Next: build your short list &rarr;</button>
+    </div>
+  </div>
+</section>
+
+<!-- 8 · short list -->
+<section class="pane" id="p8">
+  <h2 class="ptitle">Build your short list <span class="mins">14 min</span></h2>
+  <p class="lede">Six options, from at least two different doors. Tap to add the ones worth your time, add your own, then mark which of <em>your</em> three values each one serves. These become the rows of your options spreadsheet.</p>
+
+  <div class="card sm">
+    <p style="margin:0 0 8px;font-size:14.4px;color:var(--ink-soft)"><strong style="color:var(--purple)">Why at least two doors.</strong>
+    Not because you are supposed to hedge. Because in April, when one door says no or costs more than the letter implied, a list with only one kind of thing on it is not a list &mdash; it is a hope.</p>
+  </div>
+
+  <div class="card">
+    <h3>Real options, with real deadlines</h3>
+    <p class="lede" style="margin-bottom:12px">Tap to add. Every one of these was verified in September 2026 &mdash; the deadline shown is the one on the program's own site.</p>
+    <div class="filters no-print" id="catFilter"></div>
+    <div class="catgrid" id="catHost"></div>
+    <div class="addown no-print">
+      <label class="fl" for="ownName">Not on the list? Add your own.
+        <span class="hint">A school, a program, a union, a branch &mdash; anything you are actually considering.</span></label>
+      <div class="addrow">
+        <input type="text" id="ownName" placeholder="e.g. Howard University, or Local 5 plumbing">
+        <select id="ownDoor">
+          <option value="">Which door?</option>
+          <option>4-Year College</option>
+          <option>2-Year / Certificate</option>
+          <option>Trade / Apprenticeship</option>
+          <option>Military</option>
+        </select>
+        <button class="btn p sm" id="ownAdd" type="button">Add</button>
+      </div>
+      <div class="cnt" id="ownNote"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>My short list</h3>
+    <div class="counter" id="slcount">On my list: <b>0</b> &nbsp;&middot;&nbsp; doors covered: <b>0</b> of 4</div>
+    <div id="slHost"></div>
+    <label class="fl" for="firstMove" style="margin-top:16px">The one thing I will actually do first
+      <span class="hint">Pick the star on the option you are most serious about, then write the move. Something you could finish this week &mdash; not &ldquo;research it.&rdquo; 5+ words.</span></label>
+    <textarea id="firstMove" rows="2" placeholder="e.g. Start the IBEW Local 26 application Thursday after school — it closes December 31"></textarea>
+    <div class="cnt" data-for="firstMove"></div>
+    <div class="gate no" id="g8"><span class="ic">&#9679;</span><span></span></div>
+    <div class="navrow">
+      <button class="btn g" data-go="5">&larr; Back</button>
+      <button class="btn p" data-go="7">Next: exit ticket &rarr;</button>
+    </div>
+  </div>
+</section>
+
+<!-- 6 -->
+<section class="pane" id="p6">
+  <h2 class="ptitle">Exit ticket <span class="mins">8 min</span></h2>
+  <p class="lede no-print">Eight questions, one retry each. A wrong answer tells you what to look at again &mdash; not what the answer is.</p>
+  <div class="card no-print">
+    <div id="quiz"></div>
+    <div class="score" id="quizScore">Answered <b>0</b> of 8</div>
+  </div>
+  <div class="nb" id="notebook">
+    <div class="nbh">
+      <h3>CCR Notebook &mdash; Activity 1.1.2</h3>
+      <p>College Readiness &middot; Values, Identity &amp; Fit</p>
+    </div>
+    <div class="nbb">
+      <div class="row"><span class="k">Exit ticket</span><span><span class="scoreBig" id="nbScore">0</span> <span style="color:var(--ink-soft)">/ 8 on the first try</span></span></div>
+      <div class="row"><span class="k">Big idea</span><span>A preference is what you would like. A value is what you would give something up for. Only one of them survives a hard choice.</span></div>
+      <div class="row"><span class="k">The method</span><span>Ten is a list. Three is a decision. Ranking in pairs forces the trade-offs that ranking ten at once lets you avoid.</span></div>
+      <div class="row"><span class="k">Your top three</span><span id="nbTop">&mdash;</span></div>
+      <div class="row"><span class="k">Short list</span><span id="nbList">&mdash;</span></div>
+      <div class="row"><span class="k">First move</span><span id="nbMove">&mdash;</span></div>
+      <div class="row"><span class="k">Consistency</span><span id="nbCons">&mdash;</span></div>
+      <h4 style="margin-top:18px">Everything you wrote &mdash; copy this into the assignment</h4>
+      <div id="doc">Finish the exit ticket and your full page appears here.</div>
+      <div class="btnrow no-print">
+        <button class="btn p" id="copyBtn">Copy everything</button>
+        <button class="btn g" id="rowsBtn">Copy spreadsheet rows</button>
+        <button class="btn g" id="printBtn">Print / save as PDF</button>
+        <span class="flash" id="copyFlash">Copied.</span>
+      </div>
+    </div>
+  </div>
+  <div class="gate no" id="g6" style="margin-top:16px"><span class="ic">&#9679;</span><span></span></div>
+  <div class="navrow"><button class="btn g" data-go="6">&larr; Back</button><button class="btn g" data-go="8">Extra credit &mdash; five real situations &rarr;</button></div>
+</section>
+
+</div>
+
+<footer class="foot">College Readiness &middot; CCR 1.1.2 &middot; Runs offline. Nothing you type is sent anywhere &mdash; and nothing is saved, so copy your work before you close the tab.</footer>
+
+<script>
+(function(){
+"use strict";
+function $(id){ return document.getElementById(id); }
+function mk(tag, attrs, html){
+  var n = document.createElement(tag);
+  if(attrs) for(var k in attrs) n.setAttribute(k, attrs[k]);
+  if(html !== undefined) n.innerHTML = html;
+  return n;
+}
+function v(id){ var n = $(id); return n ? String(n.value||"").trim() : ""; }
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function words(s){ s = String(s||"").trim(); return s ? s.split(/\s+/).length : 0; }
+
+var SALT = "mb-ccr-112";
+function hsh(s){ var x = 5381; for(var i=0;i<s.length;i++){ x = (((x<<5)+x) ^ s.charCodeAt(i)) >>> 0; } return x.toString(16); }
+function keyOf(q, o){ return hsh(SALT + "|" + q + "|" + o); }
+var KEY = {
+  qc1:"9b268cb",
+  x1:"e14585c1", x3:"e1456cc5", x4:"e14579c5", x6:"e14560c6",
+  y1:"e1470920", y2:"e1470d22", y3:"e1471122", x8:"e14569c8"
+};
+function isRight(q, o){ return keyOf(q, o) === KEY[q]; }
+function ordered(list, ord){
+  if(!ord) return list;
+  var by = {}; list.forEach(function(o){ by[o.id] = o; });
+  return ord.map(function(k){ return by[k]; }).filter(Boolean);
+}
+
+/* ============ values ============ */
+var VALUES = [
+  ["Achievement","Finishing hard things and having it count."],
+  ["Adventure","New places, new situations, not knowing exactly what happens next."],
+  ["Authenticity","Being the same person everywhere you go."],
+  ["Independence","Deciding for yourself, without checking in with anyone."],
+  ["Balance","Room for school, people, rest, and you — not just one of them."],
+  ["Belonging","Being somewhere people know your name and notice if you are gone."],
+  ["Challenge","Work that is genuinely hard. Easy bores you."],
+  ["Community","A group that shows up for each other, not just hangs out."],
+  ["Compassion","Noticing when someone is struggling and doing something about it."],
+  ["Competition","Keeping score. Wanting to win."],
+  ["Creativity","Making things that did not exist before."],
+  ["Curiosity","Asking why until you actually understand it."],
+  ["Discipline","Doing it when you do not feel like it."],
+  ["Diversity","Being around people whose lives look nothing like yours."],
+  ["Faith","A belief system that shapes how you live, not just what you say."],
+  ["Family","The people you are from. Their opinion carries weight."],
+  ["Financial security","Not having to worry about money. Knowing the number."],
+  ["Freedom","Few rules, few people telling you where to be."],
+  ["Friendship","A few people you would drop anything for."],
+  ["Fun","Enjoying the actual day, not just the outcome."],
+  ["Growth","Being better at something in June than you were in September."],
+  ["Health","Sleep, food, movement, your head on straight."],
+  ["Honesty","Saying the true thing even when the easy thing is right there."],
+  ["Humor","Not taking it all so seriously. Making people laugh."],
+  ["Impact","Leaving something different than you found it."],
+  ["Justice","Things being fair, and doing something when they are not."],
+  ["Kindness","How you treat people who cannot do anything for you."],
+  ["Leadership","People following because they want to, not because they have to."],
+  ["Learning","Knowing more this year than last, for its own sake."],
+  ["Loyalty","Sticking with people. Not leaving when it gets hard."],
+  ["Nature","Outside. Air, trees, water, space to move."],
+  ["Order","Knowing what happens next. A plan you can see."],
+  ["Peace","Low drama. A quiet head."],
+  ["Recognition","Being seen for what you actually did."],
+  ["Respect","Being taken seriously by people you take seriously."],
+  ["Responsibility","People counting on you, and you coming through."],
+  ["Risk","Being willing to lose something for a shot at more."],
+  ["Service","Work that helps somebody besides you."],
+  ["Stability","Things staying steady. Knowing the ground is not moving."],
+  ["Tradition","Where you come from, carried forward on purpose."]
+];
+var VDEF = {}; VALUES.forEach(function(p){ VDEF[p[0]] = p[1]; });
+var picked = [];
+
+function buildValues(){
+  var host = $("vgrid");
+  VALUES.forEach(function(p){
+    var b = mk("button", { "class":"vchip", type:"button", "data-v":p[0] });
+    b.appendChild(mk("span", { "class":"vn" }, p[0]));
+    b.appendChild(mk("span", { "class":"vd" }, p[1]));
+    b.addEventListener("click", function(){ togglePick(p[0]); });
+    host.appendChild(b);
+  });
+  paintValues();
+}
+function togglePick(name){
+  var i = picked.indexOf(name);
+  if(i > -1) picked.splice(i, 1);
+  else if(picked.length < 10) picked.push(name);
+  else return;
+  resetSort();
+  paintValues();
+  refresh();
+}
+function paintValues(){
+  var full = picked.length >= 10;
+  Array.prototype.forEach.call($("vgrid").children, function(b){
+    var on = picked.indexOf(b.getAttribute("data-v")) > -1;
+    b.classList.toggle("pick", on);
+    b.classList.toggle("off", full && !on);
+  });
+  $("vcount").innerHTML = "Chosen: <b>" + picked.length + "</b> of 10";
+}
+function gate2(){
+  if(picked.length < 10) return { ok:false, msg:"Choose " + (10 - picked.length) + " more." };
+  return { ok:true, msg:"Ten chosen. Checkmark is up." };
+}
+
+/* ============ 1 · quick check ============ */
+var QC = {
+  ord:["c","a","d","b"],
+  q:"Which of these is a value rather than a preference?",
+  opts:[
+    { id:"a", t:"I would rather go somewhere warm." },
+    { id:"b", t:"I would turn down a better-ranked school to stay close to my grandmother." },
+    { id:"c", t:"I like schools with nice dorms." },
+    { id:"d", t:"I want a campus with good food." }
+  ],
+  fb:{
+    a:"Weather is a real thing to want. Ask the harder question: what would this person give up for it? If the answer is nothing, check the other options.",
+    b:"Something real is being traded away — ranking, in exchange for staying near family. That trade is what makes it a value instead of a want.",
+    c:"Dorm quality is worth wanting. But look for the option where somebody loses something they care about in order to get it.",
+    d:"Food matters more than people admit. Still — nothing is being sacrificed here. Look for the option with a cost attached."
+  }
+};
+var qcRight = false;
+function buildQC(){
+  var wrap = mk("div", { "class":"q" });
+  wrap.appendChild(mk("p", { "class":"qh" }, QC.q));
+  var opts = mk("div", { "class":"opts" });
+  ordered(QC.opts, QC.ord).forEach(function(o){
+    var lab = mk("label", { "class":"opt" });
+    var inp = mk("input", { type:"radio", name:"qc1", value:o.id });
+    lab.appendChild(inp); lab.appendChild(mk("span", {}, o.t));
+    inp.addEventListener("change", function(){
+      var fb = $("qc1fb");
+      if(isRight("qc1", o.id)){
+        qcRight = true;
+        lab.classList.add("hit");
+        opts.querySelectorAll("input").forEach(function(x){ x.disabled = true; });
+        opts.querySelectorAll(".opt").forEach(function(x){ x.classList.add("lock"); });
+        fb.className = "qfb good on";
+        fb.innerHTML = "<strong>That's it.</strong> " + QC.fb[o.id];
+      } else {
+        lab.classList.add("miss");
+        fb.className = "qfb bad on";
+        fb.innerHTML = "<strong>Not that one — try again.</strong> " + QC.fb[o.id];
+      }
+      refresh();
+    });
+    opts.appendChild(lab);
+  });
+  wrap.appendChild(opts);
+  wrap.appendChild(mk("div", { "class":"qfb", id:"qc1fb" }));
+  $("qc1").appendChild(wrap);
+}
+function gate1(){
+  if(!qcRight) return { ok:false, msg:"Answer the quick check correctly to finish this section." };
+  return { ok:true, msg:"Section complete. Checkmark is up." };
+}
+
+/* ============ 3 · pairwise sort (binary insertion) ============ */
+var sorted = [], si = 1, lo = 0, hi = 0, comps = 0, estimate = 0, sortDone = false;
+function resetSort(){
+  sorted = []; si = 1; lo = 0; hi = 0; comps = 0; sortDone = false;
+  var rc = $("rankCard"); if(rc) rc.style.display = "none";
+  var sc = $("sortCard"); if(sc) sc.style.display = "";
+  var c = $("confirm3"); if(c) c.value = "";
+  renderSort();
+}
+function startSort(){
+  sorted = [picked[0]]; si = 1; lo = 0; hi = 1; comps = 0; sortDone = false;
+  estimate = 0; for(var k = 2; k <= picked.length; k++) estimate += Math.ceil(Math.log(k) / Math.log(2));
+  renderSort();
+}
+function renderSort(){
+  var host = $("sortArea");
+  if(!host) return;
+  host.innerHTML = "";
+  if(picked.length < 10){
+    host.appendChild(mk("p", { "class":"lede" }, "Go back to section 2 and choose your ten first."));
+    $("sortProg").firstChild.style.width = "0%";
+    $("sortNote").textContent = "";
+    return;
+  }
+  if(!sorted.length){ startSort(); return; }
+  if(si >= picked.length){ finishSort(); return; }
+  var A = picked[si], B = sorted[(lo + hi) >> 1];
+  var vs = mk("div", { "class":"vs" });
+  [A, B].forEach(function(name, idx){
+    if(idx === 1){
+      vs.appendChild(mk("div", { "class":"vsmid" }, "OR"));
+    }
+    var b = mk("button", { "class":"vsbtn", type:"button" });
+    b.appendChild(mk("span", { "class":"vn" }, name));
+    b.appendChild(mk("span", { "class":"vd" }, VDEF[name] || ""));
+    b.addEventListener("click", function(){ answerPair(name === A); });
+    vs.appendChild(b);
+  });
+  host.appendChild(mk("p", { "class":"lede", style:"font-weight:600;color:var(--ink)" },
+    "If you could only keep one of these, which one?"));
+  host.appendChild(vs);
+  var pct = Math.min(99, Math.round(comps / Math.max(1, estimate) * 100));
+  $("sortProg").firstChild.style.width = pct + "%";
+  $("sortNote").textContent = "Comparison " + (comps + 1) + " of about " + estimate + ". Go with your gut — you can run it again at the end.";
+}
+function answerPair(newWins){
+  comps++;
+  var mid = (lo + hi) >> 1;
+  if(newWins) hi = mid; else lo = mid + 1;
+  if(lo >= hi){
+    sorted.splice(lo, 0, picked[si]);
+    si++; lo = 0; hi = sorted.length;
+  }
+  renderSort();
+}
+function finishSort(){
+  sortDone = true;
+  $("sortCard").style.display = "none";
+  $("rankCard").style.display = "";
+  var ol = $("ranklist"); ol.innerHTML = "";
+  sorted.forEach(function(name, i){
+    var li = mk("li", i < 3 ? { "class":"top3" } : null);
+    li.appendChild(mk("span", {}, "<strong>" + esc(name) + "</strong> &nbsp;<span style='color:var(--ink-faint);font-weight:400;font-size:13px'>" + esc(VDEF[name] || "") + "</span>"));
+    ol.appendChild(li);
+  });
+  refresh();
+}
+function topThree(){
+  var raw = v("confirm3");
+  if(!raw) return [];
+  return raw.split(",").map(function(s){ return s.trim(); }).filter(Boolean);
+}
+function gate3(){
+  if(picked.length < 10) return { ok:false, msg:"Choose ten values in section 2 first." };
+  if(!sortDone) return { ok:false, msg:"Finish the pair-by-pair sort." };
+  var t3 = topThree();
+  if(t3.length !== 3) return { ok:false, msg:"Type exactly three values, separated by commas." };
+  var bad = t3.filter(function(x){ return picked.map(function(p){ return p.toLowerCase(); }).indexOf(x.toLowerCase()) === -1; });
+  if(bad.length) return { ok:false, msg:"Not from your ten: " + bad.join(", ") + ". Use values you actually chose." };
+  return { ok:true, msg:"Top three locked in. Checkmark is up." };
+}
+
+/* ============ 4 · value → life ============ */
+var IDEAS = [
+  "A school where nobody is checking whether you went to class — or one where somebody notices immediately.",
+  "Class size: 400 in a lecture hall, or 18 around a table.",
+  "How far from home, and how easily you can get back.",
+  "Whether the campus has the club, team, or scene you would actually join.",
+  "Whether the major locks you in freshman year or lets you change your mind.",
+  "Who is in the room with you — same kinds of people you already know, or not.",
+  "Whether there is a real path from this program to the work you want.",
+  "How much money you are asking your family to carry."
+];
+var lifeText = {};
+function lifeVal(id){ var n = $(id); return n ? String(n.value||"").trim() : String(lifeText[id]||"").trim(); }
+function buildLife(){
+  var host = $("lifeHost");
+  for(var s = 0; s < 3; s++){
+    if($("ls" + s)) lifeText["ls" + s] = $("ls" + s).value;
+    if($("lf" + s)) lifeText["lf" + s] = $("lf" + s).value;
+  }
+  host.innerHTML = "";
+  var t3 = topThree();
+  if(t3.length !== 3){
+    host.appendChild(mk("div", { "class":"card" },
+      "<p class='lede'>Lock in your top three in section 3, and your number one will appear here.</p>"));
+    return;
+  }
+  t3.forEach(function(name, i){
+    var box = mk("div", { "class":"vbox" });
+    var head = mk("div", { "class":"vhead" });
+    head.appendChild(mk("span", { "class":"num" }, String(i + 1)));
+    head.appendChild(mk("span", { "class":"lab" }, esc(name)));
+    box.appendChild(head);
+    box.appendChild(mk("label", { "class":"fl", "for":"ls" + i },
+      "Where I go next, " + esc(name.toLowerCase()) + " looks like&hellip; <span class='hint'>A campus, a job site, a base, a program &mdash; something you could actually see. 8+ words.</span>"));
+    box.appendChild(mk("textarea", { id:"ls" + i, rows:"2", placeholder:"Where I go next, this looks like…" }));
+    box.appendChild(mk("div", { "class":"cnt", "data-for":"ls" + i }));
+    box.appendChild(mk("label", { "class":"fl", "for":"lf" + i },
+      "With friends, " + esc(name.toLowerCase()) + " looks like&hellip; <span class='hint'>Something a person either does or does not do. 8+ words.</span>"));
+    box.appendChild(mk("textarea", { id:"lf" + i, rows:"2", placeholder:"With friends this looks like…" }));
+    box.appendChild(mk("div", { "class":"cnt", "data-for":"lf" + i }));
+    var rev = mk("div", { "class":"reveal" });
+    var rb = mk("button", { "class":"rbtn", type:"button" }, "Stuck? Show idea starters");
+    var rbody = mk("div", { "class":"rbody" }, "<ul style='margin:0;padding-left:18px'>" +
+      IDEAS.map(function(x){ return "<li style='margin:4px 0'>" + x + "</li>"; }).join("") + "</ul>");
+    rb.addEventListener("click", function(){
+      rev.classList.toggle("open");
+      rb.textContent = rev.classList.contains("open") ? "Hide idea starters" : "Stuck? Show idea starters";
+    });
+    rev.appendChild(rb); rev.appendChild(rbody);
+    box.appendChild(rev);
+    host.appendChild(box);
+    ["ls" + i, "lf" + i].forEach(function(fid){
+      if(lifeText[fid] !== undefined) $(fid).value = lifeText[fid];
+      wireCount(fid);
+    });
+  });
+}
+function wireCount(id, floor){
+  var min = floor || 8;
+  var ta = $(id);
+  var out = document.querySelector('.cnt[data-for="' + id + '"]');
+  if(!ta || !out) return;
+  function upd(){
+    var w = words(ta.value);
+    out.className = "cnt" + (w >= min ? " ok" : "");
+    out.innerHTML = "<b>" + w + "</b> words" + (w >= min ? " · enough" : " · aim for " + min);
+  }
+  ta.addEventListener("input", function(){ lifeText[id] = ta.value; upd(); refresh(); });
+  upd();
+}
+function gate4(){
+  var t3 = topThree();
+  if(t3.length !== 3) return { ok:false, msg:"Lock in your top three in section 3 first." };
+  var missing = 0;
+  for(var i = 0; i < 3; i++){
+    if(words(lifeVal("ls" + i)) < 8) missing++;
+    if(words(lifeVal("lf" + i)) < 8) missing++;
+  }
+  if(missing) return { ok:false, msg:missing + " sentence" + (missing === 1 ? "" : "s") + " still under eight words." };
+  return { ok:true, msg:"All six written. Checkmark is up." };
+}
+
+/* ============ 5 · scenarios ============ */
+var SCN = [
+  { id:"s1", title:"THE ACCEPTANCE", stamp:"april of senior year",
+    text:"Two schools said yes. One is four hours away and has the exact program you want. The other is twenty minutes from your house, costs almost nothing after aid, and the program is fine but not what you pictured.",
+    a:{ t:"Take the program. Go four hours away.", up:["Growth","Challenge","Independence","Adventure","Achievement","Curiosity","Learning","Freedom","Risk"], down:["Family","Financial security","Stability","Belonging","Tradition","Peace"] },
+    b:{ t:"Stay close and take the cheaper offer.", up:["Family","Financial security","Stability","Responsibility","Peace","Tradition","Belonging"], down:["Adventure","Independence","Challenge","Risk","Growth"] } },
+  { id:"s2", title:"THE GROUP CHAT", stamp:"a tuesday night",
+    text:"Your friend group has been leaving one person out of plans. Nothing cruel, nothing said out loud — they just stopped getting invited. Tonight somebody makes a joke about it and everyone laughs.",
+    a:{ t:"Say something. Right there, in front of everyone.", up:["Justice","Honesty","Kindness","Compassion","Authenticity","Loyalty","Respect","Leadership"], down:["Peace","Belonging","Fun","Friendship"] },
+    b:{ t:"Say nothing now. Text the person left out later.", up:["Peace","Belonging","Compassion","Friendship","Kindness"], down:["Justice","Honesty","Leadership","Authenticity"] } },
+  { id:"s3", title:"THE SCHEDULE", stamp:"first week of senior year",
+    text:"You can take the AP class you have been curious about, or a lighter schedule that guarantees the GPA you need and leaves room for work hours and sleep.",
+    a:{ t:"Take the AP class. Find out if you can do it.", up:["Challenge","Curiosity","Growth","Learning","Achievement","Risk"], down:["Balance","Health","Financial security","Peace","Stability"] },
+    b:{ t:"Take the lighter load. Protect the GPA and the sleep.", up:["Balance","Health","Discipline","Financial security","Stability","Peace","Responsibility"], down:["Challenge","Curiosity","Risk","Growth"] } },
+  { id:"s4", title:"THE VISIT", stamp:"a saturday in october",
+    text:"You are on a campus visit. The tour is beautiful, the name impresses people, and you have not seen a single person who reminds you of anyone you know.",
+    a:{ t:"Keep it on the list. The name opens doors.", up:["Achievement","Recognition","Competition","Impact","Financial security"], down:["Belonging","Community","Diversity","Authenticity","Peace"] },
+    b:{ t:"Take it off. You would spend four years feeling like a guest.", up:["Belonging","Community","Authenticity","Diversity","Peace","Health"], down:["Achievement","Recognition","Competition"] } },
+  { id:"s5", title:"THE FRIEND", stamp:"a month before graduation",
+    text:"Your closest friend is going to a school you did not apply to, and has started saying things like \"we should just go to the same place.\" There is still time to add an application.",
+    a:{ t:"Add the application. Some things are worth planning around.", up:["Loyalty","Friendship","Belonging","Community","Family"], down:["Independence","Authenticity","Growth","Freedom","Achievement"] },
+    b:{ t:"Do not add it. Pick the place that fits you.", up:["Independence","Authenticity","Growth","Freedom","Achievement","Responsibility"], down:["Loyalty","Friendship","Belonging"] } }
+];
+var scnPick = {};
+function buildScn(){
+  var host = $("scnHost");
+  host.innerHTML = "";
+  SCN.forEach(function(s, idx){
+    var box = mk("div", { "class":"scn" });
+    var bar = mk("div", { "class":"bar" });
+    bar.appendChild(mk("span", {}, (idx + 1) + " · " + s.title));
+    bar.appendChild(mk("span", { "class":"stamp" }, s.stamp));
+    box.appendChild(bar);
+    var body = mk("div", { "class":"body" });
+    body.appendChild(mk("p", { style:"margin:0;font-size:15px" }, esc(s.text)));
+    var o = mk("div", { "class":"opts2" });
+    ["a", "b"].forEach(function(k){
+      var b = mk("button", { "class":"obtn", type:"button", "data-k":k }, esc(s[k].t));
+      b.addEventListener("click", function(){ chooseScn(s, k, o, box); });
+      o.appendChild(b);
+    });
+    body.appendChild(o);
+    body.appendChild(mk("div", { "class":"result", id:"res_" + s.id }));
+    box.appendChild(body);
+    host.appendChild(box);
+  });
+}
+function chooseScn(s, k, optWrap, box){
+  scnPick[s.id] = k;
+  Array.prototype.forEach.call(optWrap.children, function(b){
+    b.classList.toggle("chosen", b.getAttribute("data-k") === k);
+  });
+  var t3 = topThree();
+  var up = s[k].up.map(function(x){ return x.toLowerCase(); });
+  var down = s[k].down.map(function(x){ return x.toLowerCase(); });
+  var served = t3.filter(function(x){ return up.indexOf(x.toLowerCase()) > -1; });
+  var spent = t3.filter(function(x){ return down.indexOf(x.toLowerCase()) > -1; });
+  var res = $("res_" + s.id);
+  var html = "";
+  if(!t3.length){
+    html = "<strong>Lock in your top three first</strong> and this will tell you which of your own values the choice served.";
+    res.className = "result mixed on";
+  } else if(served.length && !spent.length){
+    html = "<strong>That choice sits with your values.</strong> Nothing in your top three had to give.";
+    res.className = "result hit on";
+  } else if(served.length && spent.length){
+    html = "<strong>A real trade.</strong> You served one thing you named and spent another. That is what a values conflict feels like — it is not a mistake.";
+    res.className = "result mixed on";
+  } else if(!served.length && spent.length){
+    html = "<strong>This one cost you.</strong> Nothing in your top three was served, and something in it was spent. Worth asking whether you would make it again.";
+    res.className = "result mixed on";
+  } else {
+    html = "<strong>Your top three were not really in play here.</strong> That happens — not every decision is a values decision.";
+    res.className = "result mixed on";
+  }
+  var tags = "";
+  served.forEach(function(x){ tags += '<span class="tag up">served ' + esc(x) + "</span>"; });
+  spent.forEach(function(x){ tags += '<span class="tag down">spent ' + esc(x) + "</span>"; });
+  res.innerHTML = html + (tags ? '<div class="tagrow">' + tags + "</div>" : "");
+  updateConsistency();
+  refresh();
+}
+function updateConsistency(){
+  var t3 = topThree(); if(t3.length !== 3) return;
+  var done = Object.keys(scnPick).length;
+  if(done < SCN.length){ $("consistency").style.display = "none"; return; }
+  var top = t3[0].toLowerCase(), servedTop = 0;
+  SCN.forEach(function(s){
+    var k = scnPick[s.id]; if(!k) return;
+    if(s[k].up.map(function(x){ return x.toLowerCase(); }).indexOf(top) > -1) servedTop++;
+  });
+  var el = $("consistency");
+  el.style.display = "";
+  el.className = "callout " + (servedTop >= 3 ? "green" : "amber");
+  el.innerHTML = "<strong>You chose in line with " + esc(t3[0]) + " — your number one — in " + servedTop +
+    " of 5 situations.</strong> " + (servedTop >= 3
+      ? "That is a value you actually live by, not just one you named."
+      : "Worth sitting with. Either the ranking is off, or these situations pull harder than a list does. Both are useful to know before you build a college list.");
+}
+function gate5(){
+  var t3 = topThree();
+  if(t3.length !== 3) return { ok:false, msg:"Lock in your top three in section 3 first." };
+  var left = SCN.length - Object.keys(scnPick).length;
+  if(left) return { ok:false, msg:"Optional. " + left + " situation" + (left === 1 ? "" : "s") + " left if you want the extra checkmark." };
+  return { ok:true, msg:"All five decided. Extra checkmark earned."};
+}
+
+
+/* ============ 5 · four doors ============ */
+var DOORS = [
+  { id:"d1", key:"4-Year College", cls:"d1", title:"Four-year college", tag:"bachelor's degree",
+    facts:[
+      ["How long","Four years. Realistically more — about half of students take longer."],
+      ["What it costs","UDC, in-district, is about $8,252 a year. A public university in another state costs far more on paper — but DC TAG pays up to $15,000 a year of exactly that gap, and a full Pell Grant is up to $7,395."],
+      ["Does it pay you while you are in it","No. For four years you are spending, not earning. That is the real price, and almost nobody says it out loud."],
+      ["What it demands","Grades, essays, a FAFSA in October, and finishing a four-year thing with nobody standing over you."],
+      ["What you end with","A degree that opens doors nothing else opens — and, for most people, a loan balance."]
+    ],
+    real:"DC TAG went <strong>up</strong> this year, to $15,000 a year at any public college in the country and $3,750 at private schools in the DC area or at an HBCU anywhere. Mayor's Scholars adds up to $4,000. <strong>DC Futures is closed to new applicants</strong> — do not build a plan on it." },
+  { id:"d2", key:"2-Year / Certificate", cls:"d2", title:"Two-year college or a certificate", tag:"cheapest door here",
+    facts:[
+      ["How long","Two years for an associate degree. A few months for a certificate."],
+      ["What it costs","UDC Community College is about $3,524 a year, full-time, in-district. A full Pell Grant is $7,395 — <strong>more than the entire cost</strong>. UDC's workforce certificates are free to DC residents 18 and up."],
+      ["Does it pay you","No — but it is short enough and cheap enough that you can work the whole time."],
+      ["What it demands","A transcript or a GED, and the Accuplacer placement test."],
+      ["What you end with","An associate degree or a job credential — and, if you want it, two years of a bachelor's already paid for at community-college prices."]
+    ],
+    real:"This is not the consolation door. Montgomery College has <strong>guaranteed-admission agreements</strong> with George Mason and others: finish the associate with the GPA and you are in. The catch is that a DC resident pays out-of-state rates in Maryland and Virginia — which is precisely the hole DC TAG exists to fill." },
+  { id:"d3", key:"Trade / Apprenticeship", cls:"d3", title:"A trade or an apprenticeship", tag:"they pay you",
+    facts:[
+      ["How long","Three to five years, depending on the trade."],
+      ["What it costs","Usually nothing. IBEW Local 26 is tuition-free — a $125 application fee. Steamfitters 602 runs under $400 a year for books."],
+      ["Does it pay you","<strong>Yes, from the first day.</strong> Plumbers Local 5 pays $23.99 an hour in year one, rising to $42.64 by year five. A journeyworker there is at $53.30 an hour — $77.70 counting benefits."],
+      ["What it demands","Algebra 1 for the electricians. A no-calculator math test for the plumbers. A drug screen for most. A driver's licence for several. And a deadline you cannot be late for."],
+      ["What you end with","A licence, no debt, and a wage that does not ask what your GPA was."]
+    ],
+    real:"These have <strong>hard deadlines and they are close</strong>. IBEW Local 26 closes <strong>December 31, 2026</strong>, and tests February to May 2027 — the single best-timed program for this class. Steamfitters 602 opens one thirty-day window, every November. And the DOES Youth Apprenticeship is built specifically for seniors at DC public charter schools — you — but it needs you on a half-day schedule by January." },
+  { id:"d4", key:"Military", cls:"d4", title:"The military", tag:"paid from day one",
+    facts:[
+      ["How long","A &ldquo;four-year&rdquo; contract is <strong>eight years</strong> — four active, four in the Individual Ready Reserve. Read that twice. It is the single most misunderstood fact on this page."],
+      ["What it costs","Nothing. They pay you. E-1 base pay is $2,407.20 a month in 2026, plus $476.95 a month for food and a housing allowance if you live off base."],
+      ["Does it pay you","Immediately, and it pays for college afterward. The Post-9/11 GI Bill covers full in-state tuition at a public university, up to $1,000 a year for books, and a housing allowance — and for anyone who served after 2013 it never expires."],
+      ["What it demands","The ASVAB. Your AFQT score decides whether you can enlist at all — Army 31, Air Force 31, Marines 31, Coast Guard 32 — and your line scores decide which jobs you are allowed to have. A score from junior or senior year is good for two years."],
+      ["What you end with","A trade, a record, veterans' benefits, and college paid for. And a period of your life where somebody else decides where you live."]
+    ],
+    real:"Before you sign anything: your contract says <strong>&ldquo;ANYTHING ELSE ANYONE HAS PROMISED ME IS NOT VALID AND WILL NOT BE HONORED.&rdquo;</strong> If the job is not written in the annex, it does not exist — ask for the annex and keep a copy. Also: the DC National Guard lets you serve part-time and go to college at the same time, with up to $20,500 a year in tuition assistance. Service academies need a nomination from Delegate Norton, and Air Force ROTC scholarships close <strong>December 11, 2026</strong>." }
+];
+var VERDICTS = ["Worth my time", "Need more information", "Not for me"];
+var doorPick = {}, doorWhy = {};
+
+function buildDoors(){
+  var host = $("doorHost");
+  if(!host || host.children.length) return;
+  DOORS.forEach(function(d, i){
+    var box = mk("div", { "class":"door " + d.cls });
+    var h = mk("div", { "class":"dh" });
+    h.appendChild(mk("span", { "class":"dn" }, "Door " + (i + 1)));
+    h.appendChild(mk("span", { "class":"dt" }, d.title));
+    h.appendChild(mk("span", { "class":"dtag" }, d.tag));
+    box.appendChild(h);
+    var b = mk("div", { "class":"db" });
+    var g = mk("div", { "class":"dfacts" });
+    d.facts.forEach(function(f){
+      var cell = mk("div", { "class":"dfact" });
+      cell.appendChild(mk("span", { "class":"fl2" }, f[0]));
+      cell.appendChild(mk("span", { "class":"fv" }, f[1]));
+      g.appendChild(cell);
+    });
+    b.appendChild(g);
+    b.appendChild(mk("div", { "class":"dreal" }, "<strong>DC reality.</strong> " + d.real));
+    var v = mk("div", { "class":"dverdict" });
+    v.appendChild(mk("label", { "class":"fl" }, "Is this door worth your time? <span class='hint'>There is no wrong answer here — only an unexamined one.</span>"));
+    var opts = mk("div", { "class":"vopts" });
+    VERDICTS.forEach(function(t){
+      var btn = mk("button", { "class":"vopt", type:"button", "data-v":t }, t);
+      btn.addEventListener("click", function(){
+        doorPick[d.id] = t;
+        Array.prototype.forEach.call(opts.children, function(x){
+          x.classList.toggle("on", x.getAttribute("data-v") === t);
+        });
+        refresh();
+      });
+      opts.appendChild(btn);
+    });
+    v.appendChild(opts);
+    v.appendChild(mk("label", { "class":"fl", "for":"why_" + d.id },
+      "Because&hellip; <span class='hint'>One sentence, in your own words. 6+ words.</span>"));
+    v.appendChild(mk("textarea", { id:"why_" + d.id, rows:"2", placeholder:"Because…" }));
+    v.appendChild(mk("div", { "class":"cnt", "data-for":"why_" + d.id }));
+    b.appendChild(v);
+    box.appendChild(b);
+    host.appendChild(box);
+    wireWhy("why_" + d.id);
+  });
+}
+function wireWhy(id){
+  var ta = $(id), out = document.querySelector('.cnt[data-for="' + id + '"]');
+  if(!ta || !out) return;
+  function upd(){
+    var w = words(ta.value);
+    out.className = "cnt" + (w >= 6 ? " ok" : "");
+    out.innerHTML = "<b>" + w + "</b> words" + (w >= 6 ? " · enough" : " · aim for 6");
+  }
+  ta.addEventListener("input", function(){ doorWhy[id] = ta.value; upd(); refresh(); });
+  if(doorWhy[id] !== undefined) ta.value = doorWhy[id];
+  upd();
+}
+function gate7(){
+  var unrated = DOORS.filter(function(d){ return !doorPick[d.id]; }).length;
+  if(unrated) return { ok:false, msg:unrated + " door" + (unrated === 1 ? "" : "s") + " left to judge. Read it before you rule it out." };
+  var thin = DOORS.filter(function(d){ return words(doorWhy["why_" + d.id] || "") < 6; }).length;
+  if(thin) return { ok:false, msg:thin + " reason" + (thin === 1 ? " is" : "s are") + " still under six words." };
+  return { ok:true, msg:"All four doors looked at. Checkmark is up." };
+}
+
+/* ============ 6 · short list ============ */
+var CATALOG = [
+  { n:"University of the District of Columbia", d:"4-Year College", w:"Bachelor's, about $8,252/yr in-district", x:"Rolling — check udc.edu" },
+  { n:"Howard University", d:"4-Year College", w:"Private HBCU in DC — DC TAG pays $3,750/yr here", x:"Check the school's own deadline" },
+  { n:"A public university in another state", d:"4-Year College", w:"DC TAG covers up to $15,000/yr of the out-of-state gap", x:"Most close Nov–Feb" },
+  { n:"An HBCU outside DC", d:"4-Year College", w:"DC TAG pays $3,750/yr at private HBCUs anywhere", x:"Varies — check each" },
+  { n:"UDC Community College", d:"2-Year / Certificate", w:"About $3,524/yr — a full Pell Grant is more than that", x:"Aug 1 for fall" },
+  { n:"UDC Workforce Development certificate", d:"2-Year / Certificate", w:"FREE to DC residents 18+ — healthcare, IT, construction, early childhood", x:"Rolling — you have to call" },
+  { n:"Montgomery College (MD)", d:"2-Year / Certificate", w:"Guaranteed-admission deals with George Mason and others", x:"Rolling" },
+  { n:"Prince George's CC or NOVA", d:"2-Year / Certificate", w:"DC residents pay out-of-state — which DC TAG is built to cover", x:"Rolling" },
+  { n:"IBEW Local 26 — electrical", d:"Trade / Apprenticeship", w:"5 yrs, paid, tuition-free. About $84,000/yr when you finish", x:"CLOSES DEC 31, 2026" },
+  { n:"Plumbers & Gasfitters Local 5", d:"Trade / Apprenticeship", w:"$23.99/hr in year one → $53.30/hr as a journeyworker", x:"Year-round — apply now for 2027" },
+  { n:"Steamfitters Local 602 — HVAC & pipefitting", d:"Trade / Apprenticeship", w:"5 yrs, paid on the job, no tuition", x:"ONE WINDOW: Nov 1–30" },
+  { n:"Sheet Metal SMART Local 100", d:"Trade / Apprenticeship", w:"Paid. HS diploma not currently required", x:"New classes every 3 months" },
+  { n:"Ironworkers Local 5", d:"Trade / Apprenticeship", w:"Starts at 60% of journeyworker wage", x:"Walk in — 2nd Monday, 7:00 AM" },
+  { n:"Finishing Trades DC 51 — painter or glazier", d:"Trade / Apprenticeship", w:"4 yrs, tuition-free, $70,000+ when you finish", x:"Online, year-round" },
+  { n:"DOES Youth Apprenticeship", d:"Trade / Apprenticeship", w:"Built for DC public charter seniors. Paid. Needs a half-day schedule by January", x:"Watch Oct–Dec 2026" },
+  { n:"U.S. Army", d:"Military", w:"AFQT 31. E-1 pay $2,407/mo. GI Bill after", x:"Rolling" },
+  { n:"U.S. Navy", d:"Military", w:"Does not publish an AFQT minimum — ask", x:"Rolling" },
+  { n:"U.S. Air Force or Space Force", d:"Military", w:"AFQT 31 with a diploma, 50 with a GED", x:"Rolling" },
+  { n:"U.S. Marine Corps", d:"Military", w:"AFQT 31. 13 weeks at Parris Island", x:"Rolling" },
+  { n:"U.S. Coast Guard", d:"Military", w:"AFQT 32. Its academy needs NO nomination", x:"Academy: Oct 15 / Jan 15" },
+  { n:"DC National Guard", d:"Military", w:"Part-time — serve AND go to college. Up to $20,500/yr tuition aid", x:"Rolling" },
+  { n:"A service academy (West Point, Navy, Air Force)", d:"Military", w:"Free degree + officer commission — needs a nomination from Delegate Norton", x:"Nomination ~early Nov 2026" },
+  { n:"ROTC scholarship", d:"Military", w:"College paid for, commission after", x:"AIR FORCE CLOSES DEC 11, 2026" }
+];
+var DKEY = { "4-Year College":"k1", "2-Year / Certificate":"k2", "Trade / Apprenticeship":"k3", "Military":"k4" };
+var shortList = [], firstMove = null, catFilter = "All";
+
+function buildCatalog(){
+  var f = $("catFilter");
+  if(f && !f.children.length){
+    ["All"].concat(DOORS.map(function(d){ return d.key; })).forEach(function(k){
+      var b = mk("button", { type:"button", "data-f":k }, k);
+      if(k === "All") b.classList.add("on");
+      b.addEventListener("click", function(){
+        catFilter = k;
+        Array.prototype.forEach.call(f.children, function(x){ x.classList.toggle("on", x.getAttribute("data-f") === k); });
+        paintCatalog();
+      });
+      f.appendChild(b);
+    });
+  }
+  paintCatalog();
+}
+function onList(name){
+  return shortList.some(function(o){ return o.n.toLowerCase() === name.toLowerCase(); });
+}
+function paintCatalog(){
+  var host = $("catHost");
+  if(!host) return;
+  host.innerHTML = "";
+  CATALOG.filter(function(c){ return catFilter === "All" || c.d === catFilter; }).forEach(function(c){
+    var b = mk("button", { "class":"cat" + (onList(c.n) ? " on" : ""), type:"button" });
+    b.appendChild(mk("span", { "class":"cd " + DKEY[c.d] }, c.d));
+    b.appendChild(mk("span", { "class":"cn" }, esc(c.n)));
+    b.appendChild(mk("span", { "class":"cw" }, c.w));
+    b.appendChild(mk("span", { "class":"cx" }, c.x));
+    b.addEventListener("click", function(){ toggleOption(c.n, c.d); });
+    host.appendChild(b);
+  });
+}
+function toggleOption(name, door){
+  var i = -1;
+  shortList.forEach(function(o, k){ if(o.n.toLowerCase() === name.toLowerCase()) i = k; });
+  if(i > -1){
+    if(firstMove === shortList[i].n) firstMove = null;
+    shortList.splice(i, 1);
+  } else {
+    shortList.push({ n:name, d:door, v:[] });
+  }
+  paintCatalog(); paintList(); refresh();
+}
+function paintList(){
+  var host = $("slHost");
+  if(!host) return;
+  host.innerHTML = "";
+  var t3 = topThree();
+  if(!shortList.length){
+    host.appendChild(mk("div", { "class":"slempty" }, "Nothing on it yet. Tap options above, or add your own."));
+  }
+  shortList.forEach(function(o, idx){
+    var box = mk("div", { "class":"sl" });
+    var h = mk("div", { "class":"slh" });
+    h.appendChild(mk("span", { "class":"cd " + (DKEY[o.d] || "k1") }, o.d));
+    h.appendChild(mk("span", { "class":"sn" }, esc(o.n)));
+    var star = mk("button", { "class":"star" + (firstMove === o.n ? " on" : ""), type:"button",
+      title:"Mark this as the one you will act on first" }, "★");
+    star.addEventListener("click", function(){ firstMove = (firstMove === o.n) ? null : o.n; paintList(); refresh(); });
+    h.appendChild(star);
+    var rm = mk("button", { "class":"rm", type:"button" }, "Remove");
+    rm.addEventListener("click", function(){ toggleOption(o.n, o.d); });
+    h.appendChild(rm);
+    box.appendChild(h);
+    if(t3.length === 3){
+      var tags = mk("div", { "class":"vtags" });
+      t3.forEach(function(v){
+        var t = mk("button", { "class":"vtag" + (o.v.indexOf(v) > -1 ? " on" : ""), type:"button" }, "serves " + esc(v));
+        t.addEventListener("click", function(){
+          var k = o.v.indexOf(v);
+          if(k > -1) o.v.splice(k, 1); else o.v.push(v);
+          paintList(); refresh();
+        });
+        tags.appendChild(t);
+      });
+      box.appendChild(tags);
+    } else {
+      box.appendChild(mk("div", { "class":"slempty" }, "Lock in your top three in section 3 to score this."));
+    }
+    host.appendChild(box);
+  });
+  var doors = {};
+  shortList.forEach(function(o){ doors[o.d] = 1; });
+  $("slcount").innerHTML = "On my list: <b>" + shortList.length + "</b> &nbsp;&middot;&nbsp; doors covered: <b>" +
+    Object.keys(doors).length + "</b> of 4";
+}
+function doorCount(){
+  var d = {}; shortList.forEach(function(o){ d[o.d] = 1; }); return Object.keys(d).length;
+}
+function gate8(){
+  if(topThree().length !== 3) return { ok:false, msg:"Lock in your top three in section 3 first." };
+  if(shortList.length < 4) return { ok:false, msg:"Add " + (4 - shortList.length) + " more option" + (4 - shortList.length === 1 ? "" : "s") + " — six is better." };
+  if(doorCount() < 2) return { ok:false, msg:"Everything on your list is behind one door. Add something from a second one." };
+  var untagged = shortList.filter(function(o){ return !o.v.length; }).length;
+  if(untagged) return { ok:false, msg:untagged + " option" + (untagged === 1 ? "" : "s") + " not scored against any of your three values." };
+  if(!firstMove) return { ok:false, msg:"Star the one option you are most serious about." };
+  if(words(v("firstMove")) < 5) return { ok:false, msg:"Write the actual first move — five words or more." };
+  return { ok:true, msg:"Short list built. These are your spreadsheet rows." };
+}
+
+/* ============ 6 · exit ticket ============ */
+var QUIZ = [
+  { id:"x1", ord:["a","d","b","c"], q:"What separates a value from a preference?",
+    o:[{id:"a",t:"A value is more positive."},{id:"b",t:"A value is something you would give something up for."},
+       {id:"c",t:"A value is something everyone agrees on."},{id:"d",t:"A value is something you were taught at home."}],
+    f:{a:"Preferences can be positive too. Look for the option that describes what happens when the choice gets expensive.",
+       b:"Cost is the test. If nothing is ever traded for it, it is a want.",
+       c:"Values differ from person to person — that is the entire reason yours are worth naming. Try again.",
+       d:"Where a value came from is a different question than what makes it a value. Look for the option about trade-offs."} },
+  { id:"x3", ord:["d","a","c","b"], q:"You rank Community first, then choose the school where you knew nobody and liked the prestige. What does that tell you?",
+    o:[{id:"a",t:"Your ranking is wrong and should be thrown out."},{id:"b",t:"Nothing — rankings and choices are unrelated."},
+       {id:"c",t:"Prestige is always the better choice."},{id:"d",t:"Either the ranking needs a second look, or that choice is worth a second look. Both are worth checking."}],
+    f:{a:"Maybe. But a single choice is not enough to throw out a ranking — look for the option that keeps both possibilities open.",
+       b:"If they were unrelated, the whole activity would be pointless. Look again.",
+       c:"That is a claim about what everyone should want, which is exactly what this activity is trying to get underneath.",
+       d:"A gap between what you named and what you chose is information, not a verdict on either one."} },
+  { id:"x4", ord:["a","b","d","c"], q:"Which of these best describes Loyalty showing up in a real friendship?",
+    o:[{id:"a",t:"You say you value loyalty."},{id:"b",t:"You post about your friends."},
+       {id:"c",t:"You stay in the group chat when it is boring and show up when it is inconvenient."},{id:"d",t:"You have known each other a long time."},],
+    f:{a:"Saying it is free. Look for the option that costs something.",
+       b:"Posting is visible but cheap. Which option describes a time you were inconvenienced?",
+       c:"Showing up when it costs you is the observable version of the word.",
+       d:"Time is not the same as loyalty — plenty of long friendships are not loyal. Look for behavior."} },
+  { id:"x6", ord:["a","b","d","c"], q:"Why do your three values make a better filter for your list than a ranking does?",
+    o:[{id:"a",t:"Rankings are always inaccurate."},{id:"b",t:"A ranking measures the place; your values measure the fit between you and the place."},
+       {id:"c",t:"Because rankings are hard to find."},{id:"d",t:"Because values are more important than academics."}],
+    f:{a:"Some rankings measure real things. The issue is what they measure, not whether they are accurate.",
+       b:"A ranking says nothing about you. Fit is a relationship between two things.",
+       c:"Rankings are everywhere. Try again.",
+       d:"Nobody said academics do not matter. Look for the option about what each one measures."} },
+  { id:"y1", ord:["b","d","a","c"], q:"What is structurally different about a registered apprenticeship compared with a four-year degree?",
+    o:[{id:"a",t:"It is shorter."},{id:"b",t:"You are paid from the first day and there is no tuition."},
+       {id:"c",t:"It does not lead to a real credential."},{id:"d",t:"You can only do it if you did not get into college."}],
+    f:{a:"Some are shorter — but an electrician's apprenticeship runs five years, longer than an associate degree. Look for the option about money.",
+       b:"You earn while you learn and you finish without the debt. That is the difference in one sentence.",
+       c:"A journeyworker license is a real, portable, legally recognized credential — and it is the thing that lets you charge for the work. Try again.",
+       d:"That is a story people repeat, not a fact. Several of these programs turn away more applicants than they take. Look at the money instead."} },
+  { id:"y2", ord:["d","a","c","b"], q:"You sign a four-year enlistment contract. How long is your total obligation?",
+    o:[{id:"a",t:"Four years."},{id:"b",t:"Six years."},
+       {id:"c",t:"Eight years — four on active duty and four in the Individual Ready Reserve."},{id:"d",t:"It depends which job you pick."}],
+    f:{a:"That is the active-duty half. Every first enlistment has a second half written into it — look for the longer number.",
+       b:"Right idea, wrong number. Find the clause about the Military Service Obligation.",
+       c:"Every first enlistment carries an eight-year Military Service Obligation. Whatever you do not serve on active duty, you serve in the Individual Ready Reserve.",
+       d:"Your job changes a great deal — pay, training, where you live. Not this. This one is the same for everyone."} },
+  { id:"y3", ord:["c","a","d","b"], q:"A DC student wants a public university in another state, where out-of-state tuition is far higher. Which is built for exactly that problem?",
+    o:[{id:"a",t:"The Pell Grant."},{id:"b",t:"DC TAG."},
+       {id:"c",t:"A student loan."},{id:"d",t:"The GI Bill."}],
+    f:{a:"Pell is real money and you should file for it — but it is federal, and the amount does not change because you crossed a state line. Look for the DC one.",
+       b:"DC has no state university system, so DC TAG pays the in-state to out-of-state difference — up to $15,000 a year at a public college.",
+       c:"A loan will cover it and then charge you for it for a decade. Look for the option that is a grant, not a debt.",
+       d:"The GI Bill is real, but you serve first and use it after. Look for the one you can apply for from your bedroom this year."} },
+  { id:"x8", ord:["c","b","a","d"], q:"What is the most useful thing to do with your top three after today?",
+    o:[{id:"a",t:"Memorize them for the test."},{id:"b",t:"Run every school, program, and friendship you are considering against them."},
+       {id:"c",t:"Put them in your college essay."},{id:"d",t:"Tell your friends what yours are."}],
+    f:{a:"There is no test on the words. Ask what makes them useful rather than decorative.",
+       b:"A value you never test anything against is just a word you wrote down once.",
+       c:"They might end up there. But an essay is one afternoon — look for the option you would use all year.",
+       d:"Not a bad conversation. But which option actually changes a decision?"} }
+];
+var qState = {};
+function buildQuiz(){
+  var host = $("quiz");
+  QUIZ.forEach(function(item, i){
+    var wrap = mk("div", { "class":"q" });
+    wrap.appendChild(mk("p", { "class":"qh" }, '<span class="qn">' + (i + 1) + '.</span>' + item.q));
+    var opts = mk("div", { "class":"opts" });
+    ordered(item.o, item.ord).forEach(function(o){
+      var lab = mk("label", { "class":"opt" });
+      var inp = mk("input", { type:"radio", name:item.id, value:o.id });
+      lab.appendChild(inp); lab.appendChild(mk("span", {}, o.t));
+      inp.addEventListener("change", function(){ answerQuiz(item, o.id, opts, lab); });
+      opts.appendChild(lab);
+    });
+    wrap.appendChild(opts);
+    wrap.appendChild(mk("div", { "class":"qfb", id:"qf_" + item.id }));
+    host.appendChild(wrap);
+  });
+}
+function lockQ(opts){
+  opts.querySelectorAll("input").forEach(function(i){ i.disabled = true; });
+  opts.querySelectorAll(".opt").forEach(function(o){ o.classList.add("lock"); });
+}
+function answerQuiz(item, oid, opts, lab){
+  var st = qState[item.id] || { tries:0, done:false, first:false };
+  if(st.done) return;
+  st.tries++;
+  var fb = $("qf_" + item.id);
+  if(isRight(item.id, oid)){
+    st.done = true;
+    if(st.tries === 1) st.first = true;
+    lab.classList.add("hit"); lockQ(opts);
+    fb.className = "qfb good on";
+    fb.innerHTML = "<strong>Correct.</strong> " + item.f[oid];
+  } else if(st.tries >= 2){
+    st.done = true;
+    lab.classList.add("miss"); lockQ(opts);
+    fb.className = "qfb out on";
+    fb.innerHTML = "<strong>That was your retry.</strong> " + item.f[oid] +
+      " Bring this one to Mr. Babb — it is worth two minutes of talking through.";
+  } else {
+    lab.classList.add("miss");
+    fb.className = "qfb bad on";
+    fb.innerHTML = "<strong>Not yet — one retry left.</strong> " + item.f[oid];
+  }
+  qState[item.id] = st;
+  var done = QUIZ.filter(function(q){ return qState[q.id] && qState[q.id].done; }).length;
+  $("quizScore").innerHTML = "Answered <b>" + done + "</b> of " + QUIZ.length;
+  if(done === QUIZ.length) openNotebook();
+  refresh();
+}
+function firstTryScore(){ return QUIZ.filter(function(q){ return qState[q.id] && qState[q.id].first; }).length; }
+function gate6(){
+  var done = QUIZ.filter(function(q){ return qState[q.id] && qState[q.id].done; }).length;
+  if(done < QUIZ.length) return { ok:false, msg:(QUIZ.length - done) + " question" + (QUIZ.length - done === 1 ? "" : "s") + " left on the exit ticket." };
+  return { ok:true, msg:"Exit ticket finished. Copy your page before you close this tab." };
+}
+
+/* ============ document ============ */
+function today(){
+  var d = new Date();
+  var M = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  return M[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
+}
+var RULE = "------------------------------------------------------------";
+function buildDoc(){
+  var t3 = topThree();
+  var L = [];
+  L.push("VALUES, IDENTITY & FIT");
+  L.push("College Readiness · Mr. Babb · Activity 1.1.2");
+  L.push("Completed: " + today());
+  L.push(""); L.push(RULE); L.push("");
+  L.push("MY TOP THREE VALUES");
+  t3.forEach(function(n, i){ L.push("  " + (i + 1) + ". " + n); });
+  L.push("");
+  L.push("WHAT THEY LOOK LIKE");
+  t3.forEach(function(n, i){
+    L.push("");
+    L.push(n.toUpperCase());
+    L.push("  Where I go next:  " + (lifeVal("ls" + i) || "—"));
+    L.push("  With friends:     " + (lifeVal("lf" + i) || "—"));
+  });
+  L.push(""); L.push(RULE); L.push("");
+  L.push("THE FOUR DOORS — what I said about each one");
+  DOORS.forEach(function(d, i){
+    L.push("");
+    L.push((i + 1) + ". " + d.title.toUpperCase());
+    L.push("   Verdict: " + (doorPick[d.id] || "—"));
+    L.push("   Because: " + ((doorWhy["why_" + d.id] || "").trim() || "—"));
+  });
+  L.push(""); L.push(RULE); L.push("");
+  L.push("MY SHORT LIST — paste these into the options spreadsheet");
+  if(!shortList.length) L.push("  (nothing on it yet)");
+  shortList.forEach(function(o, i){
+    L.push("");
+    L.push("  " + (i + 1) + ". " + o.n + (firstMove === o.n ? "   *** MY FIRST MOVE ***" : ""));
+    L.push("     Door:   " + o.d);
+    L.push("     Serves: " + (o.v.join(", ") || "—"));
+  });
+  L.push("");
+  L.push("  FIRST MOVE: " + (v("firstMove") || "—"));
+  L.push(""); L.push(RULE); L.push("");
+  L.push("MY TEN (in the order I ranked them)");
+  (sorted.length ? sorted : picked).forEach(function(n, i){ L.push("  " + (i + 1) + ". " + n); });
+  if(Object.keys(scnPick).length){
+    L.push(""); L.push(RULE); L.push("");
+    L.push("EXTRA — HOW I DECIDED");
+    SCN.forEach(function(s, i){
+      var k = scnPick[s.id];
+      if(!k) return;
+      L.push("");
+      L.push((i + 1) + ". " + s.title);
+      L.push("   I chose: " + s[k].t);
+      if(t3.length){
+        var up = s[k].up.map(function(x){ return x.toLowerCase(); });
+        var dn = s[k].down.map(function(x){ return x.toLowerCase(); });
+        var srv = t3.filter(function(x){ return up.indexOf(x.toLowerCase()) > -1; });
+        var spt = t3.filter(function(x){ return dn.indexOf(x.toLowerCase()) > -1; });
+        L.push("   Served: " + (srv.join(", ") || "none of my three"));
+        L.push("   Spent:  " + (spt.join(", ") || "none of my three"));
+      }
+    });
+  }
+  L.push(""); L.push("Exit ticket, first try: " + firstTryScore() + " of " + QUIZ.length);
+  L.push(""); L.push(RULE); L.push("");
+  L.push("THE TEST I RUN FROM NOW ON:");
+  L.push("Before anything goes on my list — a school, a program, an apprenticeship, a branch —");
+  L.push("and before I give somebody my Friday night —");
+  L.push("does it serve " + (t3[0] || "____") + ", " + (t3[1] || "____") + ", or " + (t3[2] || "____") + "?");
+  L.push("And if it costs me one of them, is it worth it?");
+  return L.join("\n");
+}
+function openNotebook(){
+  var nb = $("notebook");
+  nb.classList.add("on");
+  $("nbScore").textContent = firstTryScore();
+  var t3 = topThree();
+  $("nbTop").textContent = t3.length ? t3.join("  ·  ") : "—";
+  var doors = {}; shortList.forEach(function(o){ doors[o.d] = 1; });
+  $("nbList").textContent = shortList.length
+    ? (shortList.length + " options across " + Object.keys(doors).length + " door" + (Object.keys(doors).length === 1 ? "" : "s") + " — " + shortList.map(function(o){ return o.n; }).join("; "))
+    : "—";
+  $("nbMove").textContent = (firstMove ? firstMove + " — " : "") + (v("firstMove") || "—");
+  var top = (t3[0] || "").toLowerCase(), n = 0, decided = Object.keys(scnPick).length;
+  SCN.forEach(function(s){
+    var k = scnPick[s.id]; if(!k) return;
+    if(s[k].up.map(function(x){ return x.toLowerCase(); }).indexOf(top) > -1) n++;
+  });
+  $("nbCons").textContent = (t3.length && decided)
+    ? ("Chose in line with " + t3[0] + " in " + n + " of " + decided + " situations")
+    : "Extra section not done — optional";
+  $("doc").textContent = buildDoc();
+}
+function addOwn(){
+  var name = v("ownName"), door = v("ownDoor"), note = $("ownNote");
+  if(!name){ note.className = "cnt"; note.textContent = "Type a name first."; return; }
+  if(!door){ note.className = "cnt"; note.textContent = "Pick which door it is behind."; return; }
+  if(onList(name)){ note.className = "cnt"; note.textContent = "That one is already on your list."; return; }
+  shortList.push({ n:name, d:door, v:[] });
+  $("ownName").value = ""; $("ownDoor").value = "";
+  note.className = "cnt ok"; note.textContent = "Added.";
+  paintCatalog(); paintList(); refresh();
+}
+function rowsText(){
+  var t3 = topThree();
+  var L = ["Option\tDoor\tFits " + (t3[0] || "value 1") + "\tFits " + (t3[1] || "value 2") +
+           "\tFits " + (t3[2] || "value 3") + "\tMy next action"];
+  shortList.forEach(function(o){
+    var cells = [o.n, o.d];
+    t3.forEach(function(x){ cells.push(o.v.indexOf(x) > -1 ? "Strong" : ""); });
+    cells.push(firstMove === o.n ? v("firstMove") : "");
+    L.push(cells.join("\t"));
+  });
+  return L.join("\n");
+}
+function copyRows(){
+  var txt = rowsText();
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(function(){ flash("copyFlash"); }, function(){ fallback(txt); });
+  } else fallback(txt);
+}
+function flash(id){ var f = $(id); if(!f) return; f.classList.add("on"); setTimeout(function(){ f.classList.remove("on"); }, 2000); }
+function copyDoc(){
+  var txt = buildDoc();
+  $("doc").textContent = txt;
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(function(){ flash("copyFlash"); }, function(){ fallback(txt); });
+  } else fallback(txt);
+}
+function fallback(txt){
+  var ta = document.createElement("textarea");
+  ta.value = txt; ta.setAttribute("readonly","readonly");
+  ta.style.position = "fixed"; ta.style.top = "-1000px";
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand("copy"); flash("copyFlash"); }
+  catch(e){
+    var r = document.createRange(); r.selectNodeContents($("doc"));
+    var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
+    alert("Automatic copy is blocked here. Your page is selected — press Ctrl+C (or Cmd+C) to copy it.");
+  }
+  document.body.removeChild(ta);
+}
+
+/* ============ nav + gating ============ */
+var SECTIONS = [
+  { id:"p1", g:"g1", label:"Why", gate:gate1 },
+  { id:"p2", g:"g2", label:"Keep Ten", gate:gate2 },
+  { id:"p3", g:"g3", label:"Cut to Three", gate:gate3 },
+  { id:"p4", g:"g4", label:"Make It Real", gate:gate4 },
+  { id:"p7", g:"g7", label:"Four Doors", gate:gate7 },
+  { id:"p8", g:"g8", label:"Short List", gate:gate8 },
+  { id:"p6", g:"g6", label:"Exit Ticket", gate:gate6 },
+  { id:"p5", g:"g5", label:"Extra", gate:gate5, extra:true }
+];
+var cur = 1;
+function buildPills(){
+  var host = $("pillbar");
+  SECTIONS.forEach(function(s, i){
+    var n = i + 1;
+    var b = mk("button", { type:"button", "data-step":n, "aria-current": n === 1 ? "true" : "false" });
+    if(s.extra) b.classList.add("extra");
+    b.appendChild(mk("span", { "class":"dot" }, '<span class="n">' + (s.extra ? "+" : n) + "</span>"));
+    b.appendChild(document.createTextNode(s.label));
+    b.addEventListener("click", function(){ go(n); });
+    host.appendChild(b);
+  });
+}
+function go(n){
+  if(n < 1 || n > SECTIONS.length) return;
+  cur = n;
+  SECTIONS.forEach(function(s, i){ $(s.id).classList.toggle("on", i + 1 === n); });
+  var bs = $("pillbar").querySelectorAll("button");
+  for(var i = 0; i < bs.length; i++) bs[i].setAttribute("aria-current", (i + 1) === n ? "true" : "false");
+  window.scrollTo({ top:0, behavior:"smooth" });
+  var pid = SECTIONS[n - 1].id;
+  if(pid === "p3" && picked.length === 10 && !sorted.length) renderSort();
+  if(pid === "p4") buildLife();
+  if(pid === "p7") buildDoors();
+  if(pid === "p8") { buildCatalog(); paintList(); }
+  if(pid === "p5") { buildScn(); restoreScn(); updateConsistency(); }
+  refresh();
+}
+function restoreScn(){
+  Object.keys(scnPick).forEach(function(id){
+    var s = SCN.filter(function(x){ return x.id === id; })[0];
+    if(!s) return;
+    var host = $("scnHost");
+    Array.prototype.forEach.call(host.querySelectorAll(".scn"), function(box, i){
+      if(SCN[i].id !== id) return;
+      var wrap = box.querySelector(".opts2");
+      chooseScn(s, scnPick[id], wrap, box);
+    });
+  });
+}
+document.addEventListener("click", function(e){
+  var t = e.target.closest ? e.target.closest("[data-go]") : null;
+  if(t) go(parseInt(t.getAttribute("data-go"), 10));
+});
+function setGate(id, r){
+  var el = $(id); if(!el) return;
+  el.className = "gate " + (r.ok ? "yes" : "no");
+  el.querySelector(".ic").innerHTML = r.ok ? "&#10003;" : "&#9679;";
+  el.querySelector("span:last-child").textContent = r.msg;
+}
+function refresh(){
+  var bs = $("pillbar").querySelectorAll("button");
+  SECTIONS.forEach(function(s, i){
+    var r = s.gate();
+    setGate(s.g, r);
+    bs[i].classList.toggle("done", r.ok);
+  });
+}
+
+/* ============ init ============ */
+buildPills();
+buildQC();
+buildValues();
+buildQuiz();
+$("clearPicks").addEventListener("click", function(){ picked = []; resetSort(); paintValues(); refresh(); });
+$("useSort").addEventListener("click", function(){
+  if(sorted.length >= 3){ $("confirm3").value = sorted.slice(0, 3).join(", "); refresh(); }
+});
+$("redoSort").addEventListener("click", function(){ resetSort(); go(3); });
+$("confirm3").addEventListener("input", function(){
+  var t3 = topThree();
+  $("confirmNote").textContent = t3.length === 3 ? "" : "Three values, separated by commas.";
+  refresh();
+});
+wireCount("firstMove", 5);
+$("ownAdd").addEventListener("click", addOwn);
+$("ownName").addEventListener("keydown", function(e){ if(e.key === "Enter"){ e.preventDefault(); addOwn(); } });
+$("copyBtn").addEventListener("click", copyDoc);
+$("rowsBtn").addEventListener("click", copyRows);
+$("printBtn").addEventListener("click", function(){ $("doc").textContent = buildDoc(); setTimeout(function(){ window.print(); }, 60); });
+refresh();
+
+})();
+</script>
+</body>
+</html>
